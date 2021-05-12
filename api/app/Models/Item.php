@@ -20,6 +20,8 @@ class Item extends Model
     public const STATE_BORROWED = 1;
     public const STATE_BROKEN = 2;
 
+    protected $table = 'item';
+
     protected $fillable = [
         'name',
         'price',
@@ -33,5 +35,8 @@ class Item extends Model
 
     protected $hidden = [];
 
-    protected $casts = [];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 }

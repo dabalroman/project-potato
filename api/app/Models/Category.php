@@ -16,11 +16,16 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Category extends Model
 {
+    protected $table = 'category';
+
     protected $fillable = [
         'name',
     ];
 
     protected $hidden = [];
 
-    protected $casts = [];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 }
