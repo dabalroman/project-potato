@@ -1,15 +1,26 @@
 import Auth from '@/Model/Auth';
 
 export default class Api {
+  /**
+   * @return {{Authorization: (string|string), 'Content-type': string, Accept: string, 'Cache-Control': string}}
+   */
   static getHeaders () {
     return {
       'Accept': 'application/json',
       'Content-type': 'application/json',
       'Cache-Control': 'no-cache',
-      'Authorization': Auth.getToken()
+      'Authorization': Auth.getBearerToken()
     };
   }
 
+  /**
+   * Make HTTP request
+   * @param method
+   * @param url
+   * @param headers Object with headers as key: value
+   * @param body
+   * @param callback Function to call after successful request
+   */
   static makeRequest (method, url, headers, body, callback) {
     let params = {
       method: method,
@@ -38,6 +49,12 @@ export default class Api {
       });
   }
 
+  /**
+   * Make GET request
+   * @param callback
+   * @param url
+   * @param id
+   */
   static get (callback, url, id = null) {
     if (id !== null) {
       url += '/' + id;
@@ -46,14 +63,33 @@ export default class Api {
     this.makeRequest('GET', url, this.getHeaders(), null, callback);
   }
 
+  /**
+   * Make POST request
+   * @param callback
+   * @param url
+   * @param data
+   */
   static post (callback, url, data) {
     this.makeRequest('POST', url, this.getHeaders(), data, callback);
   }
 
+  /**
+   * Make PUT request
+   * @param callback
+   * @param url
+   * @param id
+   * @param data
+   */
   static put (callback, url, id, data) {
     this.makeRequest('PUT', url, this.getHeaders(), data, callback);
   }
 
+  /**
+   * Make DELETE request
+   * @param callback
+   * @param url
+   * @param id
+   */
   static delete (callback, url, id) {
     url += '/' + id;
 

@@ -7,6 +7,13 @@ export default class Category {
   created_at;
   updated_at;
 
+  /**
+   * Crate category object
+   * @param name
+   * @param id
+   * @param created_at
+   * @param updated_at
+   */
   constructor (name, id = null, created_at = null, updated_at = null) {
     this.id = id;
     this.name = name;
@@ -14,6 +21,11 @@ export default class Category {
     this.updated_at = updated_at;
   }
 
+  /**
+   * Get all categories from DB
+   * This is async task, data won't be available immediately
+   * @return {Category[]}
+   */
   static getAll () {
     let categories = [];
 
@@ -26,6 +38,12 @@ export default class Category {
     return categories;
   }
 
+  /**
+   * Get one category from DB by id
+   * This is async task, data won't be available immediately
+   * @param id
+   * @return {Category}
+   */
   static getById (id) {
     let category = new Category();
 
@@ -36,6 +54,9 @@ export default class Category {
     return category;
   }
 
+  /**
+   * Save object to DB
+   */
   save () {
     let data = {
       'name': this.name
@@ -48,6 +69,10 @@ export default class Category {
     }
   }
 
+  /**
+   * Delete object from DB if no any foreign-key dependencies
+   * Does not delete this instance
+   */
   delete () {
     Api.delete(null, ApiUrls.categories, this.id);
   }
