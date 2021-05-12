@@ -1,0 +1,19 @@
+.fullscreen {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+#main_view {
+    .header {
+        background-color: #dd9844;
+    }
+
+    .column {
+        background-color: #adb3e3;
+        border: 1px solid #4453dd;
+    }
+}

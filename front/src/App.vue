@@ -1,28 +1,29 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Main v-if="auth.loggedIn === true"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Main from './views/Main';
+import Auth from '@/Model/Auth';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
-}
-</script>
+    Main
+  },
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+  data () {
+    return {
+      auth: new Auth()
+    };
+  },
+
+  mounted () {
+    if(!this.auth.loggedIn) {
+      this.auth.login('admin@localhost', 'admin');
+    }
+  }
+};
+</script>

@@ -1,4 +1,7 @@
-# front
+# Potato CRM - DEVEL
+
+## Bootstrap vue:
+https://bootstrap-vue.org/docs/components
 
 ## Project setup
 ```
