@@ -27,7 +27,7 @@ class CreateItemTable extends Migration
 
             $table->foreign('source')->references('id')->on('source');
             $table->foreign('category')->references('id')->on('category');
-            $table->foreign('last_edit_by')->references('id')->on('user');
+            $table->foreign('last_edit_by')->references('id')->on('users');
         });
     }
 

@@ -1,6 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\SourceController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,32 +18,64 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get(
-    '/user', function (Request $request) {
-    return $request->user();
-}
+//Route::middleware('auth:api')->get(
+//    '/user', function (Request $request) {
+//    return $request->user();
+//}
+//);
+
+Route::group(
+    ['middleware' => 'api', 'prefix' => 'auth'],
+    function () {
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::post('/refresh', [AuthController::class, 'refresh']);
+        Route::get('/user-profile', [AuthController::class, 'userProfile']);
+    }
 );
 
-Route::get('categories', 'App\Http\Controllers\CategoryController@index');
-Route::get('categories/{category}', 'App\Http\Controllers\CategoryController@show');
-Route::post('categories', 'App\Http\Controllers\CategoryController@store');
-Route::put('categories/{category}', 'App\Http\Controllers\CategoryController@update');
-Route::delete('categories/{category}', 'App\Http\Controllers\CategoryController@delete');
+Route::group(
+    ['middleware' => 'auth:api', 'prefix' => 'categories'],
+    function () {
+        Route::get('/', [CategoryController::class, 'index']);
+        Route::get('/{category}', [CategoryController::class, 'show']);
+        Route::post('/', [CategoryController::class, 'store']);
+        Route::put('/{category}', [CategoryController::class, 'update']);
+        Route::delete('/{category}', [CategoryController::class, 'delete']);
+    }
+);
 
-Route::get('items', 'App\Http\Controllers\ItemController@index');
-Route::get('items/{item}', 'App\Http\Controllers\ItemController@show');
-Route::post('items', 'App\Http\Controllers\ItemController@store');
-Route::put('items/{item}', 'App\Http\Controllers\ItemController@update');
-Route::delete('items/{item}', 'App\Http\Controllers\ItemController@delete');
 
-Route::get('sources', 'App\Http\Controllers\SourceController@index');
-Route::get('sources/{source}', 'App\Http\Controllers\SourceController@show');
-Route::post('sources', 'App\Http\Controllers\SourceController@store');
-Route::put('sources/{source}', 'App\Http\Controllers\SourceController@update');
-Route::delete('sources/{source}', 'App\Http\Controllers\SourceController@delete');
+Route::group(
+    ['middleware' => 'auth:api', 'prefix' => 'items'],
+    function () {
+        Route::get('/', [ItemController::class, 'index']);
+        Route::get('/{item}', [ItemController::class, 'show']);
+        Route::post('/', [ItemController::class, 'store']);
+        Route::put('/{item}', [ItemController::class, 'update']);
+        Route::delete('/{item}', [ItemController::class, 'delete']);
+    }
+);
 
-Route::get('users', 'App\Http\Controllers\UserController@index');
-Route::get('users/{user}', 'App\Http\Controllers\UserController@show');
-Route::post('users', 'App\Http\Controllers\UserController@store');
-Route::put('users/{user}', 'App\Http\Controllers\UserController@update');
-Route::delete('users/{user}', 'App\Http\Controllers\UserController@delete');
+Route::group(
+    ['middleware' => 'auth:api', 'prefix' => 'sources'],
+    function () {
+        Route::get('/', [SourceController::class, 'index']);
+        Route::get('/{source}', [SourceController::class, 'show']);
+        Route::post('/', [SourceController::class, 'store']);
+        Route::put('/{source}', [SourceController::class, 'update']);
+        Route::delete('/{source}', [SourceController::class, 'delete']);
+    }
+);
+
+Route::group(
+    ['middleware' => 'auth:api', 'prefix' => 'users'],
+    function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::get('/{user}', [UserController::class, 'show']);
+        Route::post('/', [UserController::class, 'store']);
+        Route::put('/{user}', [UserController::class, 'update']);
+        Route::delete('/{user}', [UserController::class, 'delete']);
+    }
+);
