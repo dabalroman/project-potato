@@ -7,31 +7,48 @@ export default class Category {
   created_at;
   updated_at;
 
+  ready = false;
+
   /**
-   * Crate category object
+   * Create new object
    * @param name
+   * @return Category
+   */
+  create (name) {
+    return (new Category()).populate(null, name);
+  }
+
+  /**
+   * Populate object with data
    * @param id
+   * @param name
    * @param created_at
    * @param updated_at
+   * @return Category
    */
-  constructor (name, id = null, created_at = null, updated_at = null) {
+  populate (id, name, created_at = null, updated_at = null) {
     this.id = id;
     this.name = name;
     this.created_at = created_at;
     this.updated_at = updated_at;
+
+    this.ready = true;
+    return this;
   }
 
   /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
-   * @return {Category[]}
+   * @return Category[]
    */
   static getAll () {
     let categories = [];
 
     Api.get(function (responseData) {
       responseData.forEach(data => {
-        categories.push(new Category(data.name, data.id, data.created_at, data.updated_at));
+        categories.push(
+          (new Category()).populate(data.id, data.name, data.created_at, data.updated_at)
+        );
       });
     }, ApiUrls.categories);
 
@@ -42,13 +59,13 @@ export default class Category {
    * Get one category from DB by id
    * This is async task, data won't be available immediately
    * @param id
-   * @return {Category}
+   * @return Category
    */
   static getById (id) {
     let category = new Category();
 
     Api.get(function (responseData) {
-      category = new Category(responseData.name, responseData.id, responseData.created_at, responseData.updated_at);
+      category.populate(responseData.id, responseData.name, responseData.created_at, responseData.updated_at);
     }, ApiUrls.categories, id);
 
     return category;
@@ -62,7 +79,7 @@ export default class Category {
       'name': this.name
     };
 
-    if(this.id !== null){
+    if (this.id !== null) {
       Api.post(null, ApiUrls.categories, data);
     } else {
       Api.put(null, ApiUrls.categories, this.id, data);
