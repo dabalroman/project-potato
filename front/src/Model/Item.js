@@ -133,7 +133,7 @@ export default class Item {
             'name': this.name
         };
 
-        if (this.id !== null) {
+        if (this.id == null) {
             Api.post(null, ApiUrls.items, data);
         } else {
             Api.put(null, ApiUrls.items, this.id, data);
