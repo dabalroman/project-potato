@@ -1,16 +1,9 @@
 import Api from '@/api/Api';
 import ApiUrls from '@/api/ApiUrls';
 
-export default class Item {
+export default class Source {
   id;
   name;
-  price;
-  amount;
-  state;
-  description;
-  source;
-  category;
-  last_edit_by;
   created_at;
   updated_at;
 
@@ -19,44 +12,23 @@ export default class Item {
   /**
    * Create new object
    * @param name
-   * @param price
-   * @param amount
-   * @param state
-   * @param description
-   * @param source
-   * @param category
-   * @return Item
+   * @return Source
    */
-  static create(name, price, amount, state, description, source, category) {
-    return (new Item()).populate(null, name, price, amount, state, description, source, category);
+  static create(name) {
+    return (new Source()).populate(null, name);
   }
 
   /**
    * Populate object with data
    * @param id
    * @param name
-   * @param price
-   * @param amount
-   * @param state
-   * @param description
-   * @param source
-   * @param category
-   * @param last_edit_by
    * @param created_at
    * @param updated_at
-   * @return Item
+   * @return Source
    */
-  populate(id, name, price, amount, state, description, source, category,
-           last_edit_by = null, created_at = null, updated_at = null) {
+  populate(id, name, created_at = null, updated_at = null) {
     this.id = id;
     this.name = name;
-    this.price = price;
-    this.amount = amount;
-    this.state = state;
-    this.description = description;
-    this.source = source;
-    this.category = category;
-    this.last_edit_by = last_edit_by;
     this.created_at = created_at;
     this.updated_at = updated_at;
 
@@ -67,24 +39,17 @@ export default class Item {
   /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
-   * @return Category[]
+   * @return Source[]
    */
   static getAll() {
-    let items = [];
+    let sources = [];
 
     Api.get(function (responseData) {
       responseData.forEach(data => {
-        items.push(
-          (new Item()).populate(
+        sources.push(
+          (new Source()).populate(
             data.id,
             data.name,
-            data.price,
-            data.amount,
-            data.state,
-            data.description,
-            data.source,
-            data.category,
-            data.last_edit_by,
             data.created_at,
             data.updated_at
           )
@@ -92,29 +57,22 @@ export default class Item {
       });
     }, ApiUrls.items);
 
-    return items;
+    return sources;
   }
 
   /**
    * Get one category from DB by id
    * This is async task, data won't be available immediately
    * @param id
-   * @return Item
+   * @return Source
    */
   static getById(id) {
-    let item = new Item();
+    let item = new Source();
 
     Api.get(function (responseData) {
       item.populate(
         responseData.id,
         responseData.name,
-        responseData.price,
-        responseData.amount,
-        responseData.state,
-        responseData.description,
-        responseData.source,
-        responseData.category,
-        responseData.last_edit_by,
         responseData.created_at,
         responseData.updated_at
       );
