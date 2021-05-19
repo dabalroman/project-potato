@@ -67,7 +67,7 @@ export default class Item {
   /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
-   * @return Category[]
+   * @return Item[]
    */
   static getAll() {
     let items = [];
@@ -128,7 +128,13 @@ export default class Item {
    */
   save() {
     let data = {
-      'name': this.name
+      'name': this.name,
+      'price': this.price,
+      'amount': this.amount,
+      'state': this.state,
+      'description': this.description,
+      'source': this.source,
+      'category': this.category
     };
 
     if (this.id == null) {
