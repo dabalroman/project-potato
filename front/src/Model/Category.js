@@ -79,7 +79,7 @@ export default class Category {
       'name': this.name
     };
 
-    if (this.id !== null) {
+    if (this.id == null) {
       Api.post(null, ApiUrls.categories, data);
     } else {
       Api.put(null, ApiUrls.categories, this.id, data);
