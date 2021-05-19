@@ -67,10 +67,10 @@ export default class Source {
    * @return Source
    */
   static getById(id) {
-    let source = new Source();
+    let item = new Source();
 
     Api.get(function (responseData) {
-      source.populate(
+      item.populate(
         responseData.id,
         responseData.name,
         responseData.created_at,
@@ -78,7 +78,7 @@ export default class Source {
       );
     }, ApiUrls.items, id);
 
-    return source;
+    return item;
   }
 
   /**
