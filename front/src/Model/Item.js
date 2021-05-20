@@ -1,7 +1,15 @@
 import Api from '@/api/Api';
 import ApiUrls from '@/api/ApiUrls';
+import readonly from "@/utils/readonly";
 
 export default class Item {
+  @readonly
+  static STATE_OK = 0;
+  @readonly
+  static STATE_BORROWED = 1;
+  @readonly
+  static STATE_BROKEN = 2;
+
   id;
   name;
   price;
