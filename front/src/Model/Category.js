@@ -6,6 +6,7 @@ export default class Category {
   name;
   created_at;
   updated_at;
+  items;
 
   ready = false;
 
@@ -14,7 +15,7 @@ export default class Category {
    * @param name
    * @return Category
    */
-  create (name) {
+  static create(name) {
     return (new Category()).populate(null, name);
   }
 
@@ -22,13 +23,15 @@ export default class Category {
    * Populate object with data
    * @param id
    * @param name
+   * @param items
    * @param created_at
    * @param updated_at
    * @return Category
    */
-  populate (id, name, created_at = null, updated_at = null) {
+  populate(id, name, items = [], created_at = null, updated_at = null) {
     this.id = id;
     this.name = name;
+    this.items = items;
     this.created_at = created_at;
     this.updated_at = updated_at;
 
@@ -47,7 +50,7 @@ export default class Category {
     Api.get(function (responseData) {
       responseData.forEach(data => {
         categories.push(
-          (new Category()).populate(data.id, data.name, data.created_at, data.updated_at)
+          (new Category()).populate(data.id, data.name, data.created_at, data.updated_at, data.items)
         );
       });
     }, ApiUrls.categories);
@@ -65,7 +68,13 @@ export default class Category {
     let category = new Category();
 
     Api.get(function (responseData) {
-      category.populate(responseData.id, responseData.name, responseData.created_at, responseData.updated_at);
+      category.populate(
+        responseData.id,
+        responseData.name,
+        responseData.created_at,
+        responseData.updated_at,
+        responseData.items
+      );
     }, ApiUrls.categories, id);
 
     return category;
