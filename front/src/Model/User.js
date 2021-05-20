@@ -65,7 +65,7 @@ export default class User {
           )
         );
       });
-    }, ApiUrls.items);
+    }, ApiUrls.users);
 
     return users;
   }
@@ -88,7 +88,7 @@ export default class User {
         responseData.created_at,
         responseData.updated_at
       );
-    }, ApiUrls.items, id);
+    }, ApiUrls.users, id);
 
     return user;
   }
@@ -104,9 +104,9 @@ export default class User {
     };
 
     if (this.id == null) {
-      Api.post(null, ApiUrls.items, data);
+      Api.post(null, ApiUrls.users, data);
     } else {
-      Api.put(null, ApiUrls.items, this.id, data);
+      Api.put(null, ApiUrls.users, this.id, data);
     }
   }
 
@@ -115,6 +115,6 @@ export default class User {
    * Does not delete this instance
    */
   delete() {
-    Api.delete(null, ApiUrls.items, this.id);
+    Api.delete(null, ApiUrls.users, this.id);
   }
 }

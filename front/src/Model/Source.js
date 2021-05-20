@@ -6,6 +6,7 @@ export default class Source {
   name;
   created_at;
   updated_at;
+  items;
 
   ready = false;
 
@@ -22,13 +23,15 @@ export default class Source {
    * Populate object with data
    * @param id
    * @param name
+   * @param items
    * @param created_at
    * @param updated_at
    * @return Source
    */
-  populate(id, name, created_at = null, updated_at = null) {
+  populate(id, name, items = [], created_at = null, updated_at = null) {
     this.id = id;
     this.name = name;
+    this.items = items;
     this.created_at = created_at;
     this.updated_at = updated_at;
 
@@ -50,12 +53,13 @@ export default class Source {
           (new Source()).populate(
             data.id,
             data.name,
+            data.items,
             data.created_at,
             data.updated_at
           )
         );
       });
-    }, ApiUrls.items);
+    }, ApiUrls.sources);
 
     return sources;
   }
@@ -73,10 +77,11 @@ export default class Source {
       source.populate(
         responseData.id,
         responseData.name,
+        responseData.items,
         responseData.created_at,
         responseData.updated_at
       );
-    }, ApiUrls.items, id);
+    }, ApiUrls.sources, id);
 
     return source;
   }
@@ -90,9 +95,9 @@ export default class Source {
     };
 
     if (this.id == null) {
-      Api.post(null, ApiUrls.items, data);
+      Api.post(null, ApiUrls.sources, data);
     } else {
-      Api.put(null, ApiUrls.items, this.id, data);
+      Api.put(null, ApiUrls.sources, this.id, data);
     }
   }
 
@@ -101,6 +106,6 @@ export default class Source {
    * Does not delete this instance
    */
   delete() {
-    Api.delete(null, ApiUrls.items, this.id);
+    Api.delete(null, ApiUrls.sources, this.id);
   }
 }
