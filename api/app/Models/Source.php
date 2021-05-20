@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DB;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Source whereId($value)
  * @method static Builder|Source whereName($value)
  * @method static Builder|Source whereUpdatedAt($value)
+ * @property-read array $items
  */
 class Source extends Model
 {
@@ -31,10 +33,25 @@ class Source extends Model
         'name',
     ];
 
-    protected $hidden = [];
+    protected $appends = [
+        'items'
+    ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /** @noinspection PhpUnused */
+    public function getItemsAttribute(): array
+    {
+        return array_map(
+            static fn($e) => $e->id,
+            DB::table('item')
+              ->select('id')
+              ->where('source', '=', $this->id)
+              ->get()
+              ->toArray()
+        );
+    }
 }
