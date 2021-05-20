@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -32,7 +33,13 @@ class ItemController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $item = Item::create($request->all());
+        /** @var User $user */
+        $user = auth()->user();
+
+        $requestData = $request->all();
+        $requestData['last_edit_by'] = $user->id;
+
+        $item = Item::create($requestData);
 
         return response()->json($item, 201);
     }
@@ -44,7 +51,13 @@ class ItemController extends Controller
      */
     public function update(Request $request, Item $item): JsonResponse
     {
-        $item->update($request->all());
+        /** @var User $user */
+        $user = auth()->user();
+
+        $requestData = $request->all();
+        $requestData['last_edit_by'] = $user->id;
+
+        $item->update($requestData);
 
         return response()->json($item);
     }
