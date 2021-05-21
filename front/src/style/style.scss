@@ -9,12 +9,34 @@
 
 #main_view {
     .header {
-        background-color: #dd9844;
+        background-color: #1a1a1a;
+
+
+    }
+
+    .background {
+        background-color: #808080;
     }
 
     .column {
-        background-color: #adb3e3;
-        border: 1px solid #4453dd;
+        background-color: #595959;
 
     }
+
+    .title {
+        background-color: #262626;
+        color: #ffffff;
+        height: 45px;
+        margin-top: 25px;
+        text-indent: 20px;
+
+    }
+
+    .list {
+        background-color: #737373;
+        margin-top: -8px;
+        text-indent: 30px;
+    }
+
+
 }
