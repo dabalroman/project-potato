@@ -1,6 +1,6 @@
 import Api from '@/api/Api';
 import ApiUrls from '@/api/ApiUrls';
-import readonly from "@/utils/readonly";
+import readonly from '@/utils/readonly';
 
 export default class Item {
   @readonly
@@ -26,36 +26,36 @@ export default class Item {
 
   /**
    * Create new object
-   * @param name
-   * @param price
-   * @param amount
-   * @param state
-   * @param description
-   * @param source
-   * @param category
+   * @param {string} name
+   * @param {number} price
+   * @param {number} amount
+   * @param {number} state
+   * @param {string} description
+   * @param {number} source
+   * @param {number} category
    * @return Item
    */
-  static create(name, price, amount, state, description, source, category) {
+  static create (name, price, amount, state, description, source, category) {
     return (new Item()).populate(null, name, price, amount, state, description, source, category);
   }
 
   /**
    * Populate object with data
-   * @param id
-   * @param name
-   * @param price
-   * @param amount
-   * @param state
-   * @param description
-   * @param source
-   * @param category
-   * @param last_edit_by
-   * @param created_at
-   * @param updated_at
+   * @param {number} id
+   * @param {string} name
+   * @param {number} price
+   * @param {number} amount
+   * @param {number} state
+   * @param {string} description
+   * @param {number} source
+   * @param {number} category
+   * @param {string} last_edit_by
+   * @param {string} created_at
+   * @param {string} updated_at
    * @return Item
    */
-  populate(id, name, price, amount, state, description, source, category,
-           last_edit_by = null, created_at = null, updated_at = null) {
+  populate (id, name, price, amount, state, description, source, category,
+    last_edit_by = null, created_at = null, updated_at = null) {
     this.id = id;
     this.name = name;
     this.price = price;
@@ -75,9 +75,10 @@ export default class Item {
   /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
+   * @param {function?} callback
    * @return Item[]
    */
-  static getAll() {
+  static getAll (callback = null) {
     let items = [];
 
     Api.get(function (responseData) {
@@ -97,6 +98,10 @@ export default class Item {
             data.updated_at
           )
         );
+
+        if (callback) {
+          callback();
+        }
       });
     }, ApiUrls.items);
 
@@ -106,10 +111,11 @@ export default class Item {
   /**
    * Get one category from DB by id
    * This is async task, data won't be available immediately
-   * @param id
+   * @param {number} id
+   * @param {function?} callback
    * @return Item
    */
-  static getById(id) {
+  static getById (id, callback = null) {
     let item = new Item();
 
     Api.get(function (responseData) {
@@ -128,13 +134,17 @@ export default class Item {
       );
     }, ApiUrls.items, id);
 
+    if (callback) {
+      callback();
+    }
+
     return item;
   }
 
   /**
    * Save object to DB
    */
-  save() {
+  save () {
     let data = {
       'name': this.name,
       'price': this.price,
@@ -156,7 +166,7 @@ export default class Item {
    * Delete object from DB if no any foreign-key dependencies
    * Does not delete this instance
    */
-  delete() {
+  delete () {
     Api.delete(null, ApiUrls.items, this.id);
   }
 }
