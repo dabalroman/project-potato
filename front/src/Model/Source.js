@@ -12,23 +12,23 @@ export default class Source {
 
   /**
    * Create new object
-   * @param name
+   * @param {string} name
    * @return Source
    */
-  static create(name) {
+  static create (name) {
     return (new Source()).populate(null, name);
   }
 
   /**
    * Populate object with data
-   * @param id
-   * @param name
-   * @param items
-   * @param created_at
-   * @param updated_at
+   * @param {number} id
+   * @param {string} name
+   * @param {number[]} items
+   * @param {string} created_at
+   * @param {string} updated_at
    * @return Source
    */
-  populate(id, name, items = [], created_at = null, updated_at = null) {
+  populate (id, name, items = [], created_at = null, updated_at = null) {
     this.id = id;
     this.name = name;
     this.items = items;
@@ -42,9 +42,10 @@ export default class Source {
   /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
+   * @param {function?} callback
    * @return Source[]
    */
-  static getAll() {
+  static getAll (callback = null) {
     let sources = [];
 
     Api.get(function (responseData) {
@@ -61,6 +62,10 @@ export default class Source {
       });
     }, ApiUrls.sources);
 
+    if (callback) {
+      callback();
+    }
+
     return sources;
   }
 
@@ -68,9 +73,10 @@ export default class Source {
    * Get one category from DB by id
    * This is async task, data won't be available immediately
    * @param id
+   * @param {function} callback
    * @return Source
    */
-  static getById(id) {
+  static getById (id, callback = null) {
     let source = new Source();
 
     Api.get(function (responseData) {
@@ -83,13 +89,17 @@ export default class Source {
       );
     }, ApiUrls.sources, id);
 
+    if (callback) {
+      callback();
+    }
+
     return source;
   }
 
   /**
    * Save object to DB
    */
-  save() {
+  save () {
     let data = {
       'name': this.name
     };
@@ -105,7 +115,7 @@ export default class Source {
    * Delete object from DB if no any foreign-key dependencies
    * Does not delete this instance
    */
-  delete() {
+  delete () {
     Api.delete(null, ApiUrls.sources, this.id);
   }
 }

@@ -34,8 +34,8 @@ export default class Auth {
   /**
    * Login to api (retrieve JWT token)
    * Token is stored in localStorage
-   * @param email
-   * @param password
+   * @param {string} email
+   * @param {string} password
    */
   login (email, password) {
     let data = {

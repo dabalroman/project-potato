@@ -12,23 +12,23 @@ export default class Category {
 
   /**
    * Create new object
-   * @param name
+   * @param {string} name
    * @return Category
    */
-  static create(name) {
+  static create (name) {
     return (new Category()).populate(null, name);
   }
 
   /**
    * Populate object with data
-   * @param id
-   * @param name
-   * @param items
-   * @param created_at
-   * @param updated_at
+   * @param {number} id
+   * @param {string} name
+   * @param {number[]} items
+   * @param {string} created_at
+   * @param {string} updated_at
    * @return Category
    */
-  populate(id, name, items = [], created_at = null, updated_at = null) {
+  populate (id, name, items = [], created_at = null, updated_at = null) {
     this.id = id;
     this.name = name;
     this.items = items;
@@ -42,9 +42,10 @@ export default class Category {
   /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
+   * @param {function?} callback
    * @return Category[]
    */
-  static getAll () {
+  static getAll (callback = null) {
     let categories = [];
 
     Api.get(function (responseData) {
@@ -55,16 +56,21 @@ export default class Category {
       });
     }, ApiUrls.categories);
 
+    if (callback) {
+      callback();
+    }
+
     return categories;
   }
 
   /**
    * Get one category from DB by id
    * This is async task, data won't be available immediately
-   * @param id
+   * @param {number} id
+   * @param {function?} callback
    * @return Category
    */
-  static getById (id) {
+  static getById (id, callback = null) {
     let category = new Category();
 
     Api.get(function (responseData) {
@@ -76,6 +82,10 @@ export default class Category {
         responseData.items
       );
     }, ApiUrls.categories, id);
+
+    if (callback) {
+      callback();
+    }
 
     return category;
   }

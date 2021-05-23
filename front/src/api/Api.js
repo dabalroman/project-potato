@@ -32,12 +32,7 @@ export default class Api {
     }
 
     fetch(url, params)
-      .then(response => {
-        if (!response.ok) {
-          console.warn('Request to' + url + ' failed with code ' + response.status);
-        }
-        return response;
-      })
+      .then(this.handleErrors)
       .then(response => response.json())
       .then(response => {
         if (callback !== null) {
@@ -45,7 +40,7 @@ export default class Api {
         }
       })
       .catch(error => {
-        console.log(error);
+        console.warn(error);
       });
   }
 
@@ -94,5 +89,13 @@ export default class Api {
     url += '/' + id;
 
     this.makeRequest('DELETE', url, this.getHeaders(), null, callback);
+  }
+
+  static handleErrors(response){
+    if (!response.ok) {
+      throw Error('Request failed with ' + response.status + ': ' + response.statusText);
+    }
+
+    return response;
   }
 }
