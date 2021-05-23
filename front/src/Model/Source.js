@@ -24,8 +24,8 @@ export default class Source {
    * @param {number} id
    * @param {string} name
    * @param {number[]} items
-   * @param {string} created_at
-   * @param {string} updated_at
+   * @param {?string} created_at
+   * @param {?string} updated_at
    * @return Source
    */
   populate (id, name, items = [], created_at = null, updated_at = null) {
@@ -42,7 +42,7 @@ export default class Source {
   /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
-   * @param {function?} callback
+   * @param {?function} callback
    * @return Source[]
    */
   static getAll (callback = null) {
@@ -60,11 +60,11 @@ export default class Source {
           )
         );
       });
-    }, ApiUrls.sources);
 
-    if (callback) {
-      callback();
-    }
+      if (callback) {
+        callback(responseData.length);
+      }
+    }, ApiUrls.sources);
 
     return sources;
   }

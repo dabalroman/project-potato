@@ -21,11 +21,11 @@ export default class Category {
 
   /**
    * Populate object with data
-   * @param {number} id
+   * @param {?number} id
    * @param {string} name
    * @param {number[]} items
-   * @param {string} created_at
-   * @param {string} updated_at
+   * @param {?string} created_at
+   * @param {?string} updated_at
    * @return Category
    */
   populate (id, name, items = [], created_at = null, updated_at = null) {
@@ -42,7 +42,7 @@ export default class Category {
   /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
-   * @param {function?} callback
+   * @param {?function} callback
    * @return Category[]
    */
   static getAll (callback = null) {
@@ -51,14 +51,20 @@ export default class Category {
     Api.get(function (responseData) {
       responseData.forEach(data => {
         categories.push(
-          (new Category()).populate(data.id, data.name, data.created_at, data.updated_at, data.items)
+          (new Category()).populate(
+            data.id,
+            data.name,
+            data.items,
+            data.created_at,
+            data.updated_at
+          )
         );
       });
-    }, ApiUrls.categories);
 
-    if (callback) {
-      callback();
-    }
+      if (callback) {
+        callback(responseData.length);
+      }
+    }, ApiUrls.categories);
 
     return categories;
   }
@@ -67,7 +73,7 @@ export default class Category {
    * Get one category from DB by id
    * This is async task, data won't be available immediately
    * @param {number} id
-   * @param {function?} callback
+   * @param {?function} callback
    * @return Category
    */
   static getById (id, callback = null) {
@@ -77,9 +83,9 @@ export default class Category {
       category.populate(
         responseData.id,
         responseData.name,
+        responseData.items,
         responseData.created_at,
-        responseData.updated_at,
-        responseData.items
+        responseData.updated_at
       );
     }, ApiUrls.categories, id);
 
