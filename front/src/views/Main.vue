@@ -1,23 +1,33 @@
 <template>
   <div id="main_view" class="fullscreen">
-    <div class="header"><h4>POTATO CRM</h4></div>
+
+    <div class="header">
+      <h4>POTATO CRM
+        <b-icon icon="person-circle" style="color: white" class="des "></b-icon>
+      </h4>
+
+
+    </div>
+
+
     <b-container fluid="">
       <b-row>
 
         <b-col cols="8" class="column">
 
           <!-- Renderowanie z użyciem dataStorage -->
-          <b-table
-              :items="dataToRenderInBootstrapTable"
-              hover
-              borderless
-              style="background-color: #eee"
-          />
+          <!--          <b-table-->
+          <!--              :items="dataToRenderInBootstrapTable"-->
+          <!--              hover-->
+          <!--              borderless-->
+          <!--              style="background-color: #eee"-->
+          <!--          />-->
           <!-- Renderowanie z użyciem dataStorage -->
 
           <div v-for="data in itemListData" :key="data.category.id">
             <div class="title">
               <h3> {{ data.category.name }} </h3>
+              <b-icon icon="pencil-square" style="color: white" class="edit h4 mb-2"></b-icon>
             </div>
             <!-- Tablica obiektów, domyślnie [], sprawdzanie czy długość != 0 -->
             <div v-if="data.tableData.length > 0">
@@ -28,23 +38,31 @@
                   responsive="sm"
                   hover
                   borderless
+                  style="background-color: #eee"
               />
               <!-- Te pola kłóciły się ze zmianą, do ogarnięcia później -->
               <!--              :fields="fields"-->
               <!--              :sort-by.sync="sortBy"-->
               <!--              :sort-desc.sync="sortDesc"-->
             </div>
-            <span v-else>Nic tu nie ma!</span>
+            <span v-else style="color: red">Nic tu nie ma! </span>
           </div>
         </b-col>
 
 
         <b-col cols="4" class="detail">
+
           <div v-for="desc in desc" :key="desc.age">
             <h4>{{ selectedItemData.item.name }}</h4>
+            <b-icon icon="pencil-square" style="color: white" class="edit h4 mb-2"></b-icon>
           </div>
           <div>
             <b-table stacked="stacked" :items="selectedItemData.tableData" borderless="borderless"></b-table>
+          </div>
+          <div>
+            <b-button size="sm" class="mb-2">
+              <b-icon icon="plus-circle" aria-hidden="true"></b-icon>
+            </b-button>
           </div>
         </b-col>
 
@@ -113,6 +131,7 @@ export default {
               category: category,
               tableData: itemsInCategory.map(item => {
                     return {
+                      status: item.state,
                       nazwa: item.name,
                       zrodlo: this.dataStorage.getSourceForItem(item).name,
                       kategoria: this.dataStorage.getCategoryForItem(item).name,
@@ -139,6 +158,7 @@ export default {
       return {
         item: item,
         tableData: [{
+          status: item.state,
           nazwa: item.name,
           zrodlo: this.dataStorage.getSourceForItem(item).name,
           kategoria: this.dataStorage.getCategoryForItem(item).name,
