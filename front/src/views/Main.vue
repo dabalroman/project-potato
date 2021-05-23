@@ -15,35 +15,36 @@
           />
           <!-- Renderowanie z użyciem dataStorage -->
 
-          <div v-for="category in categories" :key="category.id">
+          <div v-for="data in itemListData" :key="data.category.id">
             <div class="title">
-              <h3> {{ category.name }} </h3>
+              <h3> {{ data.category.name }} </h3>
             </div>
             <!-- Tablica obiektów, domyślnie [], sprawdzanie czy długość != 0 -->
-
-            <div>
+            <div v-if="data.tableData.length > 0">
               <!--                 <b-icon icon="exclamation-circle" ></b-icon>-->
               <b-table
-                  :items="bla"
-                  :fields="fields"
-                  :sort-by.sync="sortBy"
-                  :sort-desc.sync="sortDesc"
+                  :items="data.tableData"
                   sort-icon-left
                   responsive="sm"
                   hover
                   borderless
               />
+              <!-- Te pola kłóciły się ze zmianą, do ogarnięcia później -->
+              <!--              :fields="fields"-->
+              <!--              :sort-by.sync="sortBy"-->
+              <!--              :sort-desc.sync="sortDesc"-->
             </div>
+            <span v-else>Nic tu nie ma!</span>
           </div>
         </b-col>
 
 
         <b-col cols="4" class="detail">
           <div v-for="desc in desc" :key="desc.age">
-            <h4>{{ desc.first_name }}</h4>
+            <h4>{{ selectedItemData.item.name }}</h4>
           </div>
           <div>
-            <b-table stacked="stacked" :items="desc" borderless="borderless"></b-table>
+            <b-table stacked="stacked" :items="selectedItemData.tableData" borderless="borderless"></b-table>
           </div>
         </b-col>
 
@@ -82,6 +83,7 @@ export default {
 
       /** @var {DataStorage} dataStorage */
       dataStorage: null,
+      selectedItemId: 2,
     };
   },
 
@@ -94,9 +96,61 @@ export default {
     this.dataStorage.loadData();
   },
 
-  //Computed to zestaw funkcji wywoływanych, gdy dane w aplikacji się zmienią.
-  // Automatycznie wykrywa to, że api zwróciło dane.
   computed: {
+    //Lista kategorii i przedmiotów
+    itemListData: function () {
+      if (!this.isDateStorageReady()) {
+        return [];
+      }
+
+      let data = [];
+
+      this.dataStorage.categories.data.forEach(category => {
+        let itemsInCategory = this.dataStorage.getArrayOfItemsFromCategory(category);
+
+        data.push(
+            {
+              category: category,
+              tableData: itemsInCategory.map(item => {
+                    return {
+                      nazwa: item.name,
+                      zrodlo: this.dataStorage.getSourceForItem(item).name,
+                      kategoria: this.dataStorage.getCategoryForItem(item).name,
+                      ilosc: item.amount + ' szt.',
+                      cena: item.price + ' zł',
+                      wartosc: item.amount * item.price + ' zł'
+                    };
+                  }
+              )
+            }
+        );
+      });
+
+      return data;
+    },
+
+    //Dane obecnie wybranego itemu
+    selectedItemData: function () {
+      if (!this.isDateStorageReady()) {
+        return [];
+      }
+
+      let item = this.dataStorage.getItem(this.selectedItemId);
+      return {
+        item: item,
+        tableData: [{
+          nazwa: item.name,
+          zrodlo: this.dataStorage.getSourceForItem(item).name,
+          kategoria: this.dataStorage.getCategoryForItem(item).name,
+          ilosc: item.amount + ' szt.',
+          cena: item.price + ' zł',
+          wartosc: item.amount * item.price + ' zł'
+        }]
+      };
+    },
+
+    //Metoda dataToRenderInBootstrapTable jest tylko na pokaz, możesz ją wyrzucić
+
     //Utworzenie danych, które mają być wyświetlane w tabeli
     dataToRenderInBootstrapTable: function () {
       //Sprawdzenie, czy api na pewno już zwróciło dane
@@ -123,6 +177,12 @@ export default {
           wartosc: item.amount * item.price + ' zł'
         };
       });
+    }
+  },
+
+  methods: {
+    isDateStorageReady: function () {
+      return this.dataStorage && this.dataStorage.isReady();
     }
   }
 };
