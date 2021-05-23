@@ -50,8 +50,8 @@ export default class Item {
    * @param {number} source
    * @param {number} category
    * @param {string} last_edit_by
-   * @param {string} created_at
-   * @param {string} updated_at
+   * @param {?string} created_at
+   * @param {?string} updated_at
    * @return Item
    */
   populate (id, name, price, amount, state, description, source, category,
@@ -75,7 +75,7 @@ export default class Item {
   /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
-   * @param {function?} callback
+   * @param {?function} callback
    * @return Item[]
    */
   static getAll (callback = null) {
@@ -98,11 +98,11 @@ export default class Item {
             data.updated_at
           )
         );
-
-        if (callback) {
-          callback();
-        }
       });
+
+      if (callback) {
+        callback(responseData.length);
+      }
     }, ApiUrls.items);
 
     return items;
@@ -112,7 +112,7 @@ export default class Item {
    * Get one category from DB by id
    * This is async task, data won't be available immediately
    * @param {number} id
-   * @param {function?} callback
+   * @param {?function} callback
    * @return Item
    */
   static getById (id, callback = null) {

@@ -28,8 +28,8 @@ export default class User {
    * @param {string} name
    * @param {string} email
    * @param {string} password
-   * @param {string} created_at
-   * @param {string} updated_at
+   * @param {?string} created_at
+   * @param {?string} updated_at
    * @return User
    */
   populate (id, name, email, password, created_at = null, updated_at = null) {
@@ -66,11 +66,11 @@ export default class User {
           )
         );
       });
-    }, ApiUrls.users);
 
-    if (callback) {
-      callback();
-    }
+      if (callback) {
+        callback(responseData.length);
+      }
+    }, ApiUrls.users);
 
     return users;
   }
@@ -79,7 +79,7 @@ export default class User {
    * Get one category from DB by id
    * This is async task, data won't be available immediately
    * @param {number} id
-   * @param {function?} callback
+   * @param {?function} callback
    * @return User
    */
   static getById (id, callback = null) {
