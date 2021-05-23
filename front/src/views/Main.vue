@@ -48,13 +48,7 @@
         <!--        </b-col>-->
 
         <b-col cols="4" class="header">
-          SZCZEGÓŁY
-          <!-- Pojedynczy obiekt, domyślnie null, sprawdzanie czy obiekt istnieje i czy jest gotowy -->
-          <div v-if="category && category.ready" class="border border-2 border-primary">
-            <div>
-              {{ category.name }}
-            </div>
-          </div>
+          <b-table :items="dataToRenderInBootstrapTable"/>
         </b-col>
 
       </b-row>
@@ -64,24 +58,43 @@
 
 <script>
 import './../style/style.css';
-import Category from '@/Model/Category';
-
+import DataStorage from '@/Data/DataStorage';
 
 export default {
   name: 'Main',
 
-  data() {
+  data () {
     return {
       categories: [],
-      category: null
+      category: null,
+      /** @var {DataStorage} dataStorage */
+      dataStorage: null,
     };
   },
 
-  mounted() {
-    this.categories = Category.getAll();
-    //this.category = Category.create('BANANY');
-    //this.category = Item.create('Cebule',10, 20,Item.STATE_OK, "Cebula +10 do ataku", 1,1);
-    //this.category.save();
+  mounted () {
+    this.dataStorage = new DataStorage();
+    this.dataStorage.loadData();
+  },
+
+  computed: {
+    dataToRenderInBootstrapTable: function (){
+      if(!this.dataStorage || !this.dataStorage.isReady()){
+        return;
+      }
+
+      let itemsInCategory = this.dataStorage.getArrayOfItemsFromCategory(this.dataStorage.categories.data[0]);
+      return itemsInCategory.map(item => {
+        return {
+          'nazwa': item.name,
+          'zrodlo': this.dataStorage.getSourceForItem(item).name,
+          'kategoria': this.dataStorage.getCategoryForItem(item).name,
+          'ilosc': item.amount,
+          'cena': item.price,
+          'wartosc': item.amount * item.price
+        };
+      });
+    }
   }
 };
 </script>
