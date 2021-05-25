@@ -1,73 +1,60 @@
 <template>
   <div id="main_view" class="fullscreen">
 
-    <div class="header">
-      <h4>POTATO CRM
-        <b-icon icon="person-circle" style="color: white" class="des "></b-icon>
-      </h4>
-
-
+    <div class="navbar">
+      <span>POTATO CRM</span>
+      <b-icon icon="person-circle"></b-icon>
     </div>
 
-
-    <b-container fluid="">
+    <b-container fluid="true">
       <b-row>
 
-        <b-col cols="8" class="column">
-
-          <!-- Renderowanie z użyciem dataStorage -->
-          <!--          <b-table-->
-          <!--              :items="dataToRenderInBootstrapTable"-->
-          <!--              hover-->
-          <!--              borderless-->
-          <!--              style="background-color: #eee"-->
-          <!--          />-->
-          <!-- Renderowanie z użyciem dataStorage -->
-
-          <div v-for="data in itemListData" :key="data.category.id">
-            <div class="title">
-              <h3> {{ data.category.name }} </h3>
-              <b-icon icon="pencil-square" style="color: white" class="edit h4 mb-2"></b-icon>
+        <b-col cols="8" class="left_panel">
+          <div class="item_list" v-for="data in itemListData" :key="data.category.id">
+            <div class="list_title">
+              <span> {{ data.category.name }} </span>
+              <b-icon icon="pencil-square" class="icon"></b-icon>
             </div>
-            <!-- Tablica obiektów, domyślnie [], sprawdzanie czy długość != 0 -->
-            <div v-if="data.tableData.length > 0">
-              <!--                 <b-icon icon="exclamation-circle" ></b-icon>-->
-              <b-table
-                  :items="data.tableData"
-                  sort-icon-left
-                  responsive="sm"
-                  hover
-                  borderless
-                  style="background-color: #eee"
-              />
-              <!-- Te pola kłóciły się ze zmianą, do ogarnięcia później -->
-              <!--              :fields="fields"-->
-              <!--              :sort-by.sync="sortBy"-->
-              <!--              :sort-desc.sync="sortDesc"-->
+            <div class="list_content">
+              <!-- Tablica obiektów, domyślnie [], sprawdzanie czy długość != 0 -->
+              <div v-if="data.tableData.length > 0">
+                <!--                 <b-icon icon="exclamation-circle" ></b-icon>-->
+                <b-table
+                    :items="data.tableData"
+                    sort-icon-left
+                    responsive="sm"
+                    hover
+                    borderless
+                />
+                <!-- Te pola kłóciły się ze zmianą, do ogarnięcia później -->
+                <!--              :fields="fields"-->
+                <!--              :sort-by.sync="sortBy"-->
+                <!--              :sort-desc.sync="sortDesc"-->
+              </div>
+              <span v-else style="color: red">Nic tu nie ma! </span>
             </div>
-            <span v-else style="color: red">Nic tu nie ma! </span>
           </div>
         </b-col>
 
-
-        <b-col cols="4" class="detail">
-
-          <div v-for="desc in desc" :key="desc.age">
+        <b-col cols="4" class="right_panel">
+          <div class="item_title">
             <h4>{{ selectedItemData.item.name }}</h4>
-            <b-icon icon="pencil-square" style="color: white" class="edit h4 mb-2"></b-icon>
+            <b-icon icon="pencil-square" class="icon"></b-icon>
           </div>
-          <div>
-            <b-table stacked="stacked" :items="selectedItemData.tableData" borderless="borderless"></b-table>
-          </div>
-          <div>
-            <b-button size="sm" class="mb-2">
-              <b-icon icon="plus-circle" aria-hidden="true"></b-icon>
-            </b-button>
+          <div class="item_details">
+            <!-- tabela do wyrzucenia -->
+            <div>
+              <b-table stacked="stacked" :items="selectedItemData.tableData" borderless="borderless"></b-table>
+            </div>
           </div>
         </b-col>
 
       </b-row>
     </b-container>
+
+    <div class="add_item_button">
+      <b-icon icon="plus" aria-hidden="true"></b-icon>
+    </div>
   </div>
 </template>
 

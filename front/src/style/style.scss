@@ -1,60 +1,150 @@
+$color-primary: #fff;
+$color-secondary: #ffbd5b;
+$color-gray-light: #555;
+$color-gray-medium: #444;
+$color-gray-dark: #353535;
+$color-gray-deep: #333;
+
+$color-shadow: #00000060;
+$shadow-size: 5px;
+$shadow-down: $color-shadow 0 $shadow-size 4px;
+$shadow-angle: $color-shadow $shadow-size $shadow-size 4px;
+
+$navbar-height: 3rem;
+
+$button-size: 4.5rem;
+
 .fullscreen {
     width: 100vw;
     height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
-
+    overflow: hidden;
 }
 
 #main_view {
-    .header {
-        background-color: #1a1a1a;
-        color: white;
-        height: 30px;
+    color: $color-primary;
 
+    .navbar {
+        background-color: $color-gray-deep;
+        height: $navbar-height;
+        line-height: $navbar-height;
+
+        font-size: 1.4rem;
+        font-weight: bold;
+        padding: 0 1rem;
+
+        box-shadow: $shadow-down;
     }
 
-    .background {
-        background-color: #808080;
+    .left_panel {
+        height: calc(100vh - #{$navbar-height});
+        overflow-y: scroll;
+
+        background: $color-gray-medium;
+
+        &::-webkit-scrollbar {
+            background: none;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #262626;
+        }
+
+        .item_list {
+            background: $color-gray-light;
+            margin: 2rem;
+
+            box-shadow: $shadow-angle;
+
+            .list_title {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                background: $color-gray-deep;
+                padding: 0.5rem 1rem;
+                font-size: 1.3rem;
+                text-transform: uppercase;
+
+                box-shadow: $shadow-down;
+            }
+
+            .list_content {
+                padding: 1rem;
+
+                .table-responsive-sm {
+                    margin: 0;
+                }
+            }
+        }
     }
 
-    .column {
-        background-color: #595959;
+    .right_panel {
+        background: $color-gray-dark;
+        padding: 2rem;
 
+        .item_title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            font-size: 1.3rem;
+        }
+
+        .item_details {
+            //Todo
+        }
     }
 
-    .title {
-        background-color: #262626;
-        color: #ffffff;
-        height: 45px;
-        margin-top: 25px;
-        text-indent: 20px;
+    .add_item_button {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: $button-size;
+        height: $button-size;
+        border-radius: 100%;
 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: $color-primary;
+        color: $color-gray-deep;
+        font-size: $button-size * 0.9;
+        //line-height: $button-size;
+        text-align: center;
+        box-shadow: $shadow-angle;
+
+        svg{
+            display: block;
+            transition-property: transform;
+            transition-duration: 0.2s;
+        }
+
+        &:hover{
+            cursor: pointer;
+            background: $color-secondary;
+
+            svg {
+                transform: rotate(90deg);
+            }
+        }
     }
+}
 
-    .list {
-        background-color: #737373;
-        margin-top: -8px;
-        text-indent: 30px;
-    }
+.icon:hover {
+    cursor: pointer;
+    color: $color-secondary;
+}
 
-    .detail {
-        background: #9e9e9e;
-        color: #ffffff;
-    }
+//Override bootstrap
+.table {
+    color: #ffffff !important;
+}
 
-    .des {
-        position: relative;
-        right: 10px;
-        float: right;
-
-    }
-
-    .edit {
-        position: relative;
-        right: 10px;
-        float: right;
-        margin-top: -33px;
-    }
+.row {
+    --bs-gutter-x: 0 !important;
+    --bs-gutter-y: 0 !important;
 }
