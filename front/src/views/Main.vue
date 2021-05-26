@@ -1,3 +1,4 @@
+
 <template>
   <div id="main_view" class="fullscreen">
 
@@ -21,6 +22,7 @@
                 <!--                 <b-icon icon="exclamation-circle" ></b-icon>-->
                 <b-table
                     :items="data.tableData"
+                    :fields="fields"
                     sort-icon-left
                     responsive="sm"
                     hover
@@ -67,6 +69,7 @@ import Item from '@/Model/Item';
 export default {
   name: 'Main',
 
+
   data () {
     return {
       categories: [],
@@ -74,16 +77,54 @@ export default {
       items: [],
       sortBy: 'age',
       sortDesc: false,
-      bla: [{ age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-        { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-        { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-        { age: 38, first_name: 'Jami', last_name: 'Carney' }],
       fields: [
-        { key: 'last_name', sortable: true },
-        { key: 'first_name', sortable: true },
-        { key: 'age', sortable: true },
+        {
+          label: "Status",
+          key: 'status',
+          sortable: true
+        },
+        {
+          label: "Nazwa",
+          key: 'nazwa',
+          sortable: false
+        },
+        {
+          label: "Źródło",
+          key: 'zrodlo',
+          sortable: false
+        },
+        {
+          label: "Kategoria",
+          key: 'kategoria',
+          sortable: true
+        },
+        {
+          label: "Ilość",
+          key: 'ilosc',
+          sortable: false
+        },
+        {
+          label: "Cena",
+          key: 'cena',
+          sortable: true
+        },
+        {
+          label: "Wartość",
+          key: 'wartosc',
+          sortable: true
+        },
+        {
+          label: "ID",
+          key: 'id',
+          sortable: false
+        }
       ],
-      desc: [{ age: 40, first_name: 'Dickerson', last_name: 'Macdonald' }],
+      bla: [{age: 40, first_name: 'Dickerson', last_name: 'Macdonald'},
+        {age: 21, first_name: 'Larsen', last_name: 'Shaw'},
+        {age: 89, first_name: 'Geneva', last_name: 'Wilson'},
+        {age: 38, first_name: 'Jami', last_name: 'Carney'}],
+
+      desc: [{age: 40, first_name: 'Dickerson', last_name: 'Macdonald'}],
       item: null,
 
       /** @var {DataStorage} dataStorage */
@@ -95,6 +136,7 @@ export default {
   mounted () {
     this.categories = Category.getAll();
     this.items = Item.getAll();
+
 
     //Wczytanie wszystkich danych z bazy danych
     this.dataStorage = new DataStorage();
@@ -128,7 +170,7 @@ export default {
                       id: item.id,
                     };
                   }
-              )
+              ),
             }
         );
       });
@@ -156,37 +198,6 @@ export default {
         }]
       };
     },
-
-    //Metoda dataToRenderInBootstrapTable jest tylko na pokaz, możesz ją wyrzucić
-
-    //Utworzenie danych, które mają być wyświetlane w tabeli
-    dataToRenderInBootstrapTable: function () {
-      //Sprawdzenie, czy api na pewno już zwróciło dane
-      if (!this.dataStorage || !this.dataStorage.isReady()) {
-        return;
-      }
-
-      //Jeśli tak to pobierz wszystkie przedmioty z pierwszej kategorii (stąd [0] na końcu)
-      //Pobieranie za pomocą metody zwracającej wszystkie przedmioty z danej kategorii
-      let itemsInCategory = this.dataStorage.getArrayOfItemsFromCategory(this.dataStorage.categories.data[0]);
-
-      //Mapuj dane, czyli weź każdy przedmiot i zamień w coś innego, w tym wypadku obiekt do renderowania w tabeli.
-      //Wygenerowane obiekty wyglądają tak - analogicznie do twoich przykładowych danych do tabel:
-      //{nazwa: 'Kij', zrodlo: 'JANUSZEX', kategoria: 'KIJE', ilosc: 4, cena: 3, wartosc: 12}
-      return itemsInCategory.map(item => {
-        return {
-          nazwa: item.name,
-          //dataStorage potrafi zwrócić źródło gdy podasz mu item
-          zrodlo: this.dataStorage.getSourceForItem(item).name,
-          //Tutaj pobieranie kategorii na podstawie itemu
-          kategoria: this.dataStorage.getCategoryForItem(item).name,
-          ilosc: item.amount + ' szt.',
-          cena: item.price + ' zł',
-          wartosc: item.amount * item.price + ' zł',
-          id: item.id
-        };
-      });
-    }
   },
 
   methods: {
