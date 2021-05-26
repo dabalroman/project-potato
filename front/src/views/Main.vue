@@ -11,7 +11,7 @@
 
         <b-col cols="8" class="left_panel">
           <div class="item_list" v-for="data in itemListData" :key="data.category.id">
-            <div class="list_title">
+            <div class=" list_title ">
               <span> {{ data.category.name }} </span>
               <b-icon icon="pencil-square" class="icon"></b-icon>
             </div>
@@ -124,7 +124,8 @@ export default {
                       kategoria: this.dataStorage.getCategoryForItem(item).name,
                       ilosc: item.amount + ' szt.',
                       cena: item.price + ' zł',
-                      wartosc: item.amount * item.price + ' zł'
+                      wartosc: item.amount * item.price + ' zł',
+                      id: item.id,
                     };
                   }
               )
@@ -181,7 +182,8 @@ export default {
           kategoria: this.dataStorage.getCategoryForItem(item).name,
           ilosc: item.amount + ' szt.',
           cena: item.price + ' zł',
-          wartosc: item.amount * item.price + ' zł'
+          wartosc: item.amount * item.price + ' zł',
+          id: item.id
         };
       });
     }
