@@ -65,6 +65,7 @@ import './../style/style.css';
 import DataStorage from '@/Data/DataStorage';
 import Category from '@/Model/Category';
 import Item from '@/Model/Item';
+import Currency from "@/utils/Currency";
 
 export default {
   name: 'Main',
@@ -165,11 +166,8 @@ export default {
                       zrodlo: this.dataStorage.getSourceForItem(item).name,
                       kategoria: this.dataStorage.getCategoryForItem(item).name,
                       ilosc: item.amount + ' szt.',
-                      cena: new Intl.NumberFormat('pl-PL', {style: 'currency', currency: 'PLN'}).format(item.price),
-                      wartosc: new Intl.NumberFormat('pl-PL', {
-                        style: 'currency',
-                        currency: 'PLN'
-                      }).format(item.amount * item.price),
+                      cena: Currency.formatCurrency(item.price),
+                      wartosc: Currency.formatCurrency(item.amount * item.price),
                       id: item.id,
                     };
                   }
@@ -196,8 +194,8 @@ export default {
           zrodlo: this.dataStorage.getSourceForItem(item).name,
           kategoria: this.dataStorage.getCategoryForItem(item).name,
           ilosc: item.amount + ' szt.',
-          cena: new Intl.NumberFormat('pl-PL', {style: 'currency', currency: 'PLN'}).format(item.price),
-          wartosc: new Intl.NumberFormat('pl-PL', {style: 'currency', currency: 'PLN'}).format(item.amount * item.price)
+          cena: Currency.formatCurrency(item.price),
+          wartosc: Currency.formatCurrency(item.amount * item.price)
         }]
       };
     },
