@@ -165,8 +165,11 @@ export default {
                       zrodlo: this.dataStorage.getSourceForItem(item).name,
                       kategoria: this.dataStorage.getCategoryForItem(item).name,
                       ilosc: item.amount + ' szt.',
-                      cena: item.price + ' zł',
-                      wartosc: item.amount * item.price + ' zł',
+                      cena: new Intl.NumberFormat('pl-PL', {style: 'currency', currency: 'PLN'}).format(item.price),
+                      wartosc: new Intl.NumberFormat('pl-PL', {
+                        style: 'currency',
+                        currency: 'PLN'
+                      }).format(item.amount * item.price),
                       id: item.id,
                     };
                   }
@@ -193,8 +196,8 @@ export default {
           zrodlo: this.dataStorage.getSourceForItem(item).name,
           kategoria: this.dataStorage.getCategoryForItem(item).name,
           ilosc: item.amount + ' szt.',
-          cena: item.price + ' zł',
-          wartosc: item.amount * item.price + ' zł'
+          cena: new Intl.NumberFormat('pl-PL', {style: 'currency', currency: 'PLN'}).format(item.price),
+          wartosc: new Intl.NumberFormat('pl-PL', {style: 'currency', currency: 'PLN'}).format(item.amount * item.price)
         }]
       };
     },
