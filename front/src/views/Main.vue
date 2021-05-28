@@ -27,6 +27,31 @@
               <!-- tabela do wyrzucenia -->
               <div>
                 <b-table stacked="stacked" :items="selectedItemData.tableData" borderless="borderless"></b-table>
+                <b-container>
+                  <b-row>
+                    <b-col cols="4" class="item_categories">
+                      <p> Status</p>
+                      <p> Nazwa</p>
+                      <p> Źródło</p>
+                      <p> Kategoria</p>
+                      <p> Ilość</p>
+                      <p> Cena</p>
+                      <p> Wartość</p>
+                    </b-col>
+                    <b-col cols="8">
+                      <div v-if="selectedItemData">
+                        <p>{{ selectedItemData.item.state }}</p>
+                        <p>{{ selectedItemData.item.name }}</p>
+                        <p>{{ selectedItemData.item.zrodlo }}</p>
+                        <!--                        <p>{{ selectedItemData.item.category}}</p>-->
+                        <!--                        <p>{{ selectedItemData.item.amount}}</p>-->
+                        <!--                        <p>{{ selectedItemData.item.price}}</p>-->
+                        <!--                        <p>{{ selectedItemData.item.value}}</p>-->
+                      </div>
+                    </b-col>
+                  </b-row>
+                </b-container>
+
               </div>
             </div>
           </div>
@@ -49,9 +74,9 @@ import CategoryComponent from '@/components/CategoryComponent';
 
 export default {
   name: 'Main',
-  components: { CategoryComponent },
+  components: {CategoryComponent},
 
-  data () {
+  data() {
     return {
       /** @var {DataStorage} dataStorage */
       dataStorage: null,
@@ -59,7 +84,7 @@ export default {
     };
   },
 
-  mounted () {
+  mounted() {
     //Wczytanie wszystkich danych z bazy danych
     this.dataStorage = new DataStorage();
     this.dataStorage.loadData();
