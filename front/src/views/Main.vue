@@ -18,15 +18,14 @@
         </b-col>
 
         <b-col cols="4" class="right_panel">
-          <div v-if="selectedItemData">
+          <div v-if="item">
             <div class="item_title">
-              <h4>{{ selectedItemData.item.name }}</h4>
+              <h4>{{ item.name }}</h4>
               <b-icon icon="pencil-square" class="icon"></b-icon>
             </div>
             <div class="item_details">
               <!-- tabela do wyrzucenia -->
               <div>
-                <b-table stacked="stacked" :items="selectedItemData.tableData" borderless="borderless"></b-table>
                 <b-container>
                   <b-row>
                     <b-col cols="4" class="item_categories">
@@ -39,12 +38,14 @@
                       <p> Wartość</p>
                     </b-col>
                     <b-col cols="8">
-                      <div v-if="selectedItemData">
-                        <p>{{ selectedItemData.item.state }}</p>
-                        <p>{{ selectedItemData.item.name }}</p>
-                        <p>{{ selectedItemData.item.zrodlo }}</p>
-                        <!--                        <p>{{ selectedItemData.item.category}}</p>-->
-                        <!--                        <p>{{ selectedItemData.item.amount}}</p>-->
+                      <div v-if="dataStorage">
+                        <p>{{ item.state }}</p>
+                        <p>{{ item.name }}</p>
+                        <p>{{ this.dataStorage.getSourceForItem(item).name }}</p>
+                        <p>{{ this.dataStorage.getCategoryForItem(item).name | capitalize }}</p>
+                        <p>{{ item.amount }}</p>
+                        <p>{{ item.price | formatCurrency }}</p>
+                        <p>{{ item.amount * item.price | formatCurrency }}</p>
                         <!--                        <p>{{ selectedItemData.item.price}}</p>-->
                         <!--                        <p>{{ selectedItemData.item.value}}</p>-->
                       </div>
@@ -100,30 +101,42 @@ export default {
       return this.dataStorage.getCategories();
     },
 
-    selectedItemData: function () {
+    item: function () {
       if (!this.isDateStorageReady()) {
         return null;
       }
 
-      let item = this.dataStorage.getItem(this.selectedItemId);
-      return {
-        item: item,
-        tableData: [{
-          status: item.state,
-          nazwa: item.name,
-          zrodlo: this.dataStorage.getSourceForItem(item).name,
-          kategoria: this.dataStorage.getCategoryForItem(item).name,
-          ilosc: item.amount + ' szt.',
-          cena: Currency.formatCurrency(item.price),
-          wartosc: Currency.formatCurrency(item.amount * item.price)
-        }]
-      };
+      return this.dataStorage.getItem(this.selectedItemId);
+      // return {
+      //   item: item,
+      //   tableData: [{
+      //     status: item.state,
+      //     nazwa: item.name,
+      //     zrodlo: ,
+      //     kategoria: ,
+      //     ilosc: item.amount + ' szt.',
+      //     cena: Currency.formatCurrency(item.price),
+      //     wartosc: Currency.formatCurrency(item.amount * item.price)
+      //   }]
+      // };
     },
   },
 
   methods: {
     isDateStorageReady: function () {
       return this.dataStorage && this.dataStorage.isReady();
+    }
+  },
+
+  filters: {
+    formatCurrency: function (value) {
+      return Currency.formatCurrency(value);
+    },
+
+    capitalize: function (value) {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
     }
   }
 };
