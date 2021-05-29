@@ -100,11 +100,12 @@ $button-size: 4.5rem;
         .item_categories {
             font-weight: bold;
             font-size: 1.05rem;
-            
         }
 
         .item_details {
-            //Todo
+            .item_row {
+                margin-bottom: 0.5rem;
+            }
         }
     }
 
@@ -127,13 +128,13 @@ $button-size: 4.5rem;
         text-align: center;
         box-shadow: $shadow-angle;
 
-        svg{
+        svg {
             display: block;
             transition-property: transform;
             transition-duration: 0.2s;
         }
 
-        &:hover{
+        &:hover {
             cursor: pointer;
             background: $color-secondary;
 
@@ -166,6 +167,6 @@ $button-size: 4.5rem;
     padding: 0;
     margin: -1px;
     overflow: hidden;
-    clip: rect(0,0,0,0);
+    clip: rect(0, 0, 0, 0);
     border: 0;
 }
