@@ -70,7 +70,7 @@ export default {
         },
         {
           key: "kategoria",
-          value: Filters.captialization(this.dataStorage.getCategoryForItem(this.item).name),
+          value: Filters.capitalize(this.dataStorage.getCategoryForItem(this.item).name),
         },
         {
           key: "ilość",
@@ -95,7 +95,7 @@ export default {
       return Filters.formatCurrency(value);
     },
     capitalize: function (value) {
-      return Filters.captialization(value);
+      return Filters.capitalize(value);
     },
     unit: function (value) {
       return Filters.unit(value);

@@ -4,10 +4,8 @@ export default class Filters {
     return i + ' szt.';
   }
 
-  static captialization(i) {
-    if (!i) return ''
-    i = i.toString()
-    return i.charAt(0).toUpperCase() + i.slice(1);
+  static capitalize(i) {
+    return i.charAt(0).toUpperCase() + i.slice(1).toLowerCase();
   }
 
   static formatCurrency(i) {
