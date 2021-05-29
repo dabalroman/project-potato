@@ -23,10 +23,8 @@
 </template>
 
 <script>
-import Currency from '@/utils/Currency';
 import DataStorage from '@/Data/DataStorage';
-import Capitalize from "@/utils/Capitalize";
-import Unit from "@/utils/Unit";
+import Filters from "@/utils/Filters";
 
 
 export default {
@@ -72,20 +70,20 @@ export default {
         },
         {
           key: "kategoria",
-          value: Capitalize.captialization(this.dataStorage.getCategoryForItem(this.item).name),
+          value: Filters.captialization(this.dataStorage.getCategoryForItem(this.item).name),
         },
         {
           key: "ilość",
-          value: Unit.unit(this.item.amount),
+          value: Filters.unit(this.item.amount),
         },
         {
           key: "cena",
-          value: Currency.formatCurrency(this.item.price)   //this.item.price,
+          value: Filters.formatCurrency(this.item.price)   //this.item.price,
 
         },
         {
           key: "wartość",
-          value: Currency.formatCurrency(this.item.amount * this.item.price),
+          value: Filters.formatCurrency(this.item.amount * this.item.price),
         },
       ];
     }
@@ -94,13 +92,13 @@ export default {
 
   filters: {
     formatCurrency: function (value) {
-      return Currency.formatCurrency(value);
+      return Filters.formatCurrency(value);
     },
     capitalize: function (value) {
-      return Capitalize.captialization(value);
+      return Filters.captialization(value);
     },
     unit: function (value) {
-      return Unit.unit(value);
+      return Filters.unit(value);
     },
   },
 

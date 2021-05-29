@@ -22,7 +22,7 @@
 
 <script>
 import Category from '@/Model/Category';
-import Currency from '@/utils/Currency';
+import Filters from '@/utils/Filters';
 import DataStorage from '@/Data/DataStorage';
 
 export default {
@@ -96,8 +96,8 @@ export default {
               zrodlo: this.dataStorage.getSourceForItem(item).name,
               kategoria: this.dataStorage.getCategoryForItem(item).name,
               ilosc: item.amount + ' szt.',
-              cena: Currency.formatCurrency(item.price),
-              wartosc: Currency.formatCurrency(item.amount * item.price),
+              cena: Filters.formatCurrency(item.price),
+              wartosc: Filters.formatCurrency(item.amount * item.price),
               id: item.id,
             };
           }
