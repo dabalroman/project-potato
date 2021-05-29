@@ -9,13 +9,22 @@
         <b-table
             :items="tableData"
             :fields="fields"
-            sort-icon-left
             responsive="sm"
+            sort-by="nazwa"
             hover
             borderless
-        />
+            @row-clicked="rowClickedHandler"
+        >
+          <template #cell(status)="data">
+            <b-icon
+                :title="data.item.status.description"
+                :class="data.item.status.class"
+                :icon="data.item.status.icon"
+                />
+          </template>
+        </b-table>
       </div>
-      <span v-else style="color: red">Nic tu nie ma! </span>
+      <span v-else class="d-block text-center">Ta kategoria jest pusta.</span>
     </div>
   </div>
 </template>
@@ -24,6 +33,7 @@
 import Category from '@/Model/Category';
 import Filters from '@/utils/Filters';
 import DataStorage from '@/Data/DataStorage';
+import Item from '@/Model/Item';
 
 export default {
   name: 'CategoryComponent',
@@ -42,44 +52,42 @@ export default {
     return {
       fields: [
         {
-          label: 'Status',
+          label: '',
           key: 'status',
-          sortable: true
+          sortable: false
         },
         {
           label: 'Nazwa',
           key: 'nazwa',
-          sortable: false
+          sortable: true
         },
         {
           label: 'Źródło',
           key: 'zrodlo',
-          sortable: false
+          sortable: true
         },
         {
           label: 'Kategoria',
           key: 'kategoria',
-          sortable: true
+          sortable: false
         },
         {
           label: 'Ilość',
           key: 'ilosc',
-          sortable: false
+          sortable: true,
+          formatter: Filters.unit
         },
         {
           label: 'Cena',
           key: 'cena',
-          sortable: true
+          sortable: true,
+          formatter: Filters.formatCurrency
         },
         {
           label: 'Wartość',
           key: 'wartosc',
-          sortable: true
-        },
-        {
-          label: 'ID',
-          key: 'id',
-          sortable: false
+          sortable: true,
+          formatter: Filters.formatCurrency
         }
       ],
     };
@@ -91,18 +99,34 @@ export default {
 
       return itemsInCategory.map(item => {
             return {
-              status: item.state,
+              status: this.getIconForItemStatus(item.state),
               nazwa: item.name,
               zrodlo: this.dataStorage.getSourceForItem(item).name,
-              kategoria: this.dataStorage.getCategoryForItem(item).name,
-              ilosc: item.amount + ' szt.',
-              cena: Filters.formatCurrency(item.price),
-              wartosc: Filters.formatCurrency(item.amount * item.price),
+              kategoria: Filters.capitalize(this.dataStorage.getCategoryForItem(item).name),
+              ilosc: item.amount,
+              cena: item.price,
+              wartosc: item.amount * item.price,
               id: item.id,
             };
           }
       );
     }
+  },
+
+  methods: {
+    getIconForItemStatus (status) {
+      if (status === Item.STATE_OK) {
+        return { description: 'Ok', icon: 'circle-fill', class: 'green' };
+      } else if (status === Item.STATE_BORROWED) {
+        return { description: 'Pożyczony', icon: 'slash-circle-fill', class: 'yellow' };
+      } else {
+        return { description: 'Zepsuty', icon: 'x-circle-fill', class: 'red' };
+      }
+    },
+
+    rowClickedHandler (rowData) {
+      this.$emit('setSelectedItem', rowData.id);
+    },
   }
 };
 </script>

@@ -150,9 +150,28 @@ $button-size: 4.5rem;
     color: $color-secondary;
 }
 
+.b-icon {
+    &.green {
+        color: #42b983;
+    }
+
+    &.yellow {
+        color: #b9a542;
+    }
+
+    &.red {
+        color: #db4e38;
+    }
+}
+
 //Override bootstrap
 .table {
     color: #ffffff !important;
+
+    tr:hover{
+        color: $color-primary !important;
+        cursor: pointer;
+    }
 }
 
 .row {

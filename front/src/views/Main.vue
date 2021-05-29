@@ -12,14 +12,21 @@
         <b-col cols="8" class="left_panel">
           <div v-if="categories && dataStorage">
             <div class="item_list" v-for="category in categories" :key="category.id">
-              <CategoryComponent :category="category" :dataStorage="dataStorage"/>
+              <CategoryComponent
+                  :category="category"
+                  :dataStorage="dataStorage"
+                  @setSelectedItem="setSelectedItem"
+              />
             </div>
           </div>
         </b-col>
 
         <b-col cols="4" class="right_panel">
           <div v-if="dataStorage">
-            <DetailComponent :selectedItemId="selectedItemId" :dataStorage="dataStorage"/>
+            <DetailComponent
+                :selectedItemId="selectedItemId"
+                :dataStorage="dataStorage"
+            />
           </div>
         </b-col>
 
@@ -51,13 +58,11 @@ export default {
   },
 
   mounted() {
-    //Wczytanie wszystkich danych z bazy danych
     this.dataStorage = new DataStorage();
     this.dataStorage.loadData();
   },
 
   computed: {
-
     categories: function () {
       if (!this.isDateStorageReady()) {
         return null;
@@ -70,6 +75,10 @@ export default {
   methods: {
     isDateStorageReady: function () {
       return this.dataStorage && this.dataStorage.isReady();
+    },
+
+    setSelectedItem: function (itemId) {
+      this.selectedItemId = itemId;
     }
   },
 
