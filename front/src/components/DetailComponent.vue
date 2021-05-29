@@ -11,33 +11,11 @@
             <b-col cols="4" class="item_categories"> {{ data.key | capitalize }}</b-col>
             <b-col cols="8">
               <div v-if="editable">
-                <b-form-input v-model=" data.value"/>
+                <b-form-input v-model=" data.value  "/>
               </div>
-              <div v-else>dupaa {{ data.value }}</div>
+              <div v-else> {{ data.value | capitalize }}</div>
             </b-col>
           </b-row>
-          <!--          <b-row>-->
-          <!--            <b-col cols="4" class="item_categories">-->
-          <!--              <p> Status</p>-->
-          <!--              <p> Nazwa</p>-->
-          <!--              <p> Źródło</p>-->
-          <!--              <p> Kategoria</p>-->
-          <!--              <p> Ilość</p>-->
-          <!--              <p> Cena</p>-->
-          <!--              <p> Wartość</p>-->
-          <!--            </b-col>-->
-          <!--            <b-col cols="8">-->
-          <!--              <div v-if="dataStorage">-->
-          <!--                <p>{{ item.state }}</p>-->
-          <!--                <p>{{ item.name }}</p>-->
-          <!--                <p>{{ this.dataStorage.getSourceForItem(item).name }}</p>-->
-          <!--                <p>{{ this.dataStorage.getCategoryForItem(item).name | capitalize }}</p>-->
-          <!--                <p>{{ item.amount }}</p>-->
-          <!--                <p>{{ item.price | formatCurrency }}</p>-->
-          <!--                <p>{{ item.amount * item.price | formatCurrency }}</p>-->
-          <!--              </div>-->
-          <!--            </b-col>-->
-          <!--          </b-row>-->
         </b-container>
       </div>
     </div>
@@ -48,6 +26,7 @@
 import Currency from '@/utils/Currency';
 import DataStorage from '@/Data/DataStorage';
 import Capitalize from "@/utils/Capitalize";
+import Unit from "@/utils/Unit";
 
 
 export default {
@@ -93,19 +72,20 @@ export default {
         },
         {
           key: "kategoria",
-          value: this.dataStorage.getCategoryForItem(this.item).name,
+          value: Capitalize.captialization(this.dataStorage.getCategoryForItem(this.item).name),
         },
         {
           key: "ilość",
-          value: this.item.amount,
+          value: Unit.unit(this.item.amount),
         },
         {
           key: "cena",
-          value: this.item.price,
+          value: Currency.formatCurrency(this.item.price)   //this.item.price,
+
         },
         {
-          key: "Wartość",
-          value: this.item.amount * this.item.price,
+          key: "wartość",
+          value: Currency.formatCurrency(this.item.amount * this.item.price),
         },
       ];
     }
@@ -116,10 +96,12 @@ export default {
     formatCurrency: function (value) {
       return Currency.formatCurrency(value);
     },
-
     capitalize: function (value) {
       return Capitalize.captialization(value);
-    }
+    },
+    unit: function (value) {
+      return Unit.unit(value);
+    },
   },
 
   methods: {
