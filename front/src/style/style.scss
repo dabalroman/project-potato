@@ -1,10 +1,16 @@
 $color-primary: #fff;
 $color-secondary: #ffbd5b;
+
 $color-gray-bright: #999;
 $color-gray-light: #555;
 $color-gray-medium: #444;
 $color-gray-dark: #353535;
 $color-gray-deep: #333;
+$color-gray-void: #262626;
+
+$color-red: #db4e38;
+$color-yellow: #d7bd39;
+$color-green: #42b983;
 
 $color-shadow: #00000060;
 $shadow-size: 5px;
@@ -50,7 +56,7 @@ $button-size: 4.5rem;
         }
 
         &::-webkit-scrollbar-thumb {
-            background: #262626;
+            background: $color-gray-void;
         }
 
         .item_list {
@@ -97,7 +103,7 @@ $button-size: 4.5rem;
             align-items: center;
             justify-content: space-between;
 
-            border-bottom: 3px solid #ffffff;
+            border-bottom: 3px solid $color-primary;
             margin-bottom: 1rem;
 
             font-size: 1.3rem;
@@ -161,15 +167,15 @@ $button-size: 4.5rem;
 
 .b-icon {
     &.green {
-        color: #42b983;
+        color: $color-green;
     }
 
     &.yellow {
-        color: #b9a542;
+        color: $color-yellow;
     }
 
     &.red {
-        color: #db4e38;
+        color: $color-red;
     }
 }
 
@@ -188,7 +194,7 @@ $button-size: 4.5rem;
 }
 
 .table {
-    color: #ffffff !important;
+    color: $color-primary !important;
 
     tr:hover{
         color: $color-primary !important;
