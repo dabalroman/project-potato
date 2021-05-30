@@ -8,7 +8,7 @@
       <div>
         <b-container>
           <b-row class="item_row" v-for="data in itemData" :key="data.key">
-            <b-col cols="4" class="item_categories"> {{ data.key | capitalize }}</b-col>
+            <b-col cols="4" class="item_label"> {{ data.key | capitalize }}</b-col>
             <b-col cols="8">
               <div v-if="editable">
                 <b-form-input v-model=" data.value  "/>
