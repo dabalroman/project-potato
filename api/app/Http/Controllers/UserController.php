@@ -32,6 +32,10 @@ class UserController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        if(!$this->amIAdmin()){
+            return response()->json(null, 403);
+        }
+
         $user = User::create($request->all());
 
         return response()->json($user, 201);
@@ -44,6 +48,10 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user): JsonResponse
     {
+        if(!$this->amIAdmin() && !$this->isThisMe($user)){
+            return response()->json(null, 403);
+        }
+
         $user->update($request->all());
 
         return response()->json($user);
@@ -55,6 +63,10 @@ class UserController extends Controller
      */
     public function delete(User $user): JsonResponse
     {
+        if(!$this->amIAdmin() && !$this->isThisMe($user)){
+            return response()->json(null, 403);
+        }
+
         $user->delete();
 
         return response()->json(null, 204);

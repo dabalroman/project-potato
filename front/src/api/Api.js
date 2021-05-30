@@ -32,20 +32,16 @@ export default class Api {
     }
 
     fetch(url, params)
-      .then(response => {
-        if (!response.ok) {
-          console.warn('Request to' + url + ' failed with code ' + response.status);
-        }
-        return response;
-      })
-      .then(response => response.json())
+      .then(this.handleErrors)
+      .then(response => response.text())
+      .then(response => response ? JSON.parse(response) : {})
       .then(response => {
         if (callback !== null) {
           callback(response);
         }
       })
       .catch(error => {
-        console.log(error);
+        console.warn(error);
       });
   }
 
@@ -81,6 +77,8 @@ export default class Api {
    * @param data
    */
   static put (callback, url, id, data) {
+    url += '/' + id;
+
     this.makeRequest('PUT', url, this.getHeaders(), data, callback);
   }
 
@@ -94,5 +92,13 @@ export default class Api {
     url += '/' + id;
 
     this.makeRequest('DELETE', url, this.getHeaders(), null, callback);
+  }
+
+  static handleErrors(response){
+    if (!response.ok) {
+      throw Error('Request failed with ' + response.status + ': ' + response.statusText);
+    }
+
+    return response;
   }
 }

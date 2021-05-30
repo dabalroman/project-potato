@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Item;
+use App\Models\User;
 use DateTime;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -19,11 +20,22 @@ class DatabaseSeeder extends Seeder
     {
         DB::table('users')->insert(
             [
-                'name' => 'admin',
-                'email' => 'admin@localhost',
-                'password' => Hash::make('admin'),
-                'created_at' => new DateTime(),
-                'updated_at' => new DateTime(),
+                [
+                    'name' => 'admin',
+                    'email' => 'admin@localhost',
+                    'password' => Hash::make('admin'),
+                    'role' => User::ROLE_ADMIN,
+                    'created_at' => new DateTime(),
+                    'updated_at' => new DateTime(),
+                ],
+                [
+                    'name' => 'user',
+                    'email' => 'user@localhost',
+                    'password' => Hash::make('user'),
+                    'role' => User::ROLE_MERE_MORTAL,
+                    'created_at' => new DateTime(),
+                    'updated_at' => new DateTime(),
+                ]
             ]
         );
 

@@ -2,7 +2,7 @@ import Api from '@/api/Api';
 import ApiUrls from '@/api/ApiUrls';
 
 // noinspection JSUnusedGlobalSymbols,DuplicatedCode
-export default class Category {
+export default class Source {
   id;
   name;
   created_at;
@@ -14,10 +14,10 @@ export default class Category {
   /**
    * Create new object
    * @param {string} name
-   * @return Category
+   * @return Source
    */
   static create (name) {
-    return (new Category()).populate(null, name);
+    return (new Source()).populate(null, name);
   }
 
   /**
@@ -27,7 +27,7 @@ export default class Category {
    * @param {number[]} items
    * @param {?string} created_at
    * @param {?string} updated_at
-   * @return Category
+   * @return Source
    */
   populate (id, name, items = [], created_at = null, updated_at = null) {
     this.id = id;
@@ -44,15 +44,15 @@ export default class Category {
    * Get all categories from DB
    * This is async task, data won't be available immediately
    * @param {?function} callback
-   * @return Category[]
+   * @return Source[]
    */
   static getAll (callback = null) {
-    let categories = [];
+    let sources = [];
 
     Api.get(function (responseData) {
       responseData.forEach(data => {
-        categories.push(
-          (new Category()).populate(
+        sources.push(
+          (new Source()).populate(
             data.id,
             data.name,
             data.items,
@@ -65,36 +65,36 @@ export default class Category {
       if (callback) {
         callback(responseData.length);
       }
-    }, ApiUrls.categories);
+    }, ApiUrls.sources);
 
-    return categories;
+    return sources;
   }
 
   /**
    * Get one category from DB by id
    * This is async task, data won't be available immediately
-   * @param {number} id
-   * @param {?function} callback
-   * @return Category
+   * @param id
+   * @param {function} callback
+   * @return Source
    */
   static getById (id, callback = null) {
-    let category = new Category();
+    let source = new Source();
 
     Api.get(function (responseData) {
-      category.populate(
+      source.populate(
         responseData.id,
         responseData.name,
         responseData.items,
         responseData.created_at,
         responseData.updated_at
       );
-    }, ApiUrls.categories, id);
+    }, ApiUrls.sources, id);
 
     if (callback) {
       callback();
     }
 
-    return category;
+    return source;
   }
 
   /**
@@ -106,9 +106,9 @@ export default class Category {
     };
 
     if (this.id == null) {
-      Api.post(null, ApiUrls.categories, data);
+      Api.post(null, ApiUrls.sources, data);
     } else {
-      Api.put(null, ApiUrls.categories, this.id, data);
+      Api.put(null, ApiUrls.sources, this.id, data);
     }
   }
 
@@ -117,6 +117,6 @@ export default class Category {
    * Does not delete this instance
    */
   delete () {
-    Api.delete(null, ApiUrls.categories, this.id);
+    Api.delete(null, ApiUrls.sources, this.id);
   }
 }

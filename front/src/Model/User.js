@@ -1,38 +1,52 @@
 import Api from '@/api/Api';
 import ApiUrls from '@/api/ApiUrls';
+import readonly from '@/utils/readonly';
 
 // noinspection JSUnusedGlobalSymbols,DuplicatedCode
-export default class Category {
+export default class User {
+  @readonly
+  static ROLE_ADMIN = 0;
+  @readonly
+  static ROLE_MERE_MORTAL = 1;
+
   id;
   name;
+  email;
+  password;
   created_at;
   updated_at;
-  items;
 
   ready = false;
 
   /**
    * Create new object
    * @param {string} name
-   * @return Category
+   * @param {string} email
+   * @param {string} password
+   * @param {number} role
+   * @return User
    */
-  static create (name) {
-    return (new Category()).populate(null, name);
+  static create (name, email, password, role) {
+    return (new User()).populate(null, name, email, password, role);
   }
 
   /**
    * Populate object with data
    * @param {?number} id
    * @param {string} name
-   * @param {number[]} items
+   * @param {string} email
+   * @param {string} password
+   * @param {number} role
    * @param {?string} created_at
    * @param {?string} updated_at
-   * @return Category
+   * @return User
    */
-  populate (id, name, items = [], created_at = null, updated_at = null) {
+  populate (id, name, email, password, role, created_at = null, updated_at = null) {
     this.id = id;
     this.name = name;
-    this.items = items;
+    this.email = email;
+    this.password = password;
+    this.role = role;
     this.created_at = created_at;
     this.updated_at = updated_at;
 
@@ -43,19 +57,21 @@ export default class Category {
   /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
-   * @param {?function} callback
-   * @return Category[]
+   * @param {function} callback
+   * @return User[]
    */
   static getAll (callback = null) {
-    let categories = [];
+    let users = [];
 
     Api.get(function (responseData) {
       responseData.forEach(data => {
-        categories.push(
-          (new Category()).populate(
+        users.push(
+          (new User()).populate(
             data.id,
             data.name,
-            data.items,
+            data.email,
+            data.password,
+            data.role,
             data.created_at,
             data.updated_at
           )
@@ -65,9 +81,9 @@ export default class Category {
       if (callback) {
         callback(responseData.length);
       }
-    }, ApiUrls.categories);
+    }, ApiUrls.users);
 
-    return categories;
+    return users;
   }
 
   /**
@@ -75,26 +91,28 @@ export default class Category {
    * This is async task, data won't be available immediately
    * @param {number} id
    * @param {?function} callback
-   * @return Category
+   * @return User
    */
   static getById (id, callback = null) {
-    let category = new Category();
+    let user = new User();
 
     Api.get(function (responseData) {
-      category.populate(
+      user.populate(
         responseData.id,
         responseData.name,
-        responseData.items,
+        responseData.email,
+        responseData.password,
+        responseData.role,
         responseData.created_at,
         responseData.updated_at
       );
-    }, ApiUrls.categories, id);
+    }, ApiUrls.users, id);
 
     if (callback) {
       callback();
     }
 
-    return category;
+    return user;
   }
 
   /**
@@ -102,13 +120,16 @@ export default class Category {
    */
   save () {
     let data = {
-      'name': this.name
+      'name': this.name,
+      'email': this.email,
+      'password': this.password,
+      'role': this.role
     };
 
     if (this.id == null) {
-      Api.post(null, ApiUrls.categories, data);
+      Api.post(null, ApiUrls.users, data);
     } else {
-      Api.put(null, ApiUrls.categories, this.id, data);
+      Api.put(null, ApiUrls.users, this.id, data);
     }
   }
 
@@ -117,6 +138,6 @@ export default class Category {
    * Does not delete this instance
    */
   delete () {
-    Api.delete(null, ApiUrls.categories, this.id);
+    Api.delete(null, ApiUrls.users, this.id);
   }
 }
