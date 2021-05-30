@@ -1,4 +1,5 @@
 import DataContainer from '@/Data/DataContainer';
+import Item from '@/Model/Item';
 
 export default class DataStorage {
     /** @type {DataContainer} */
@@ -53,6 +54,13 @@ export default class DataStorage {
     }
 
     /**
+     * @return {{text: string, value: number}[]}
+     */
+    getCategorySelectData () {
+        return this.categories.data.map(category => {return {value: category.id, text: category.name}});
+    }
+
+    /**
      * @return {?Source[]}
      */
     getSources () {
@@ -60,10 +68,28 @@ export default class DataStorage {
     }
 
     /**
+     * @return {{text: string, value: number}[]}
+     */
+    getSourcesSelectData () {
+        return this.sources.data.map(category => {return {value: category.id, text: category.name}});
+    }
+
+    /**
      * @return {?Item[]}
      */
     getItems () {
         return this.items.data;
+    }
+
+    /**
+     * @param {?Item} item
+     * @return {
+     * [{icon: string, text: string, value: number, class: string}]
+     * |{icon: string, text: string, value: number, class: string}
+     * }
+     */
+    getItemStateSelectData (item = null) {
+        return Item.getItemStateData(item);
     }
 
     /**

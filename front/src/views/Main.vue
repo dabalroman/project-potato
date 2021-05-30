@@ -14,7 +14,6 @@
             <div class="item_list" v-for="category in categories" :key="category.id">
               <CategoryComponent
                   :category="category"
-                  :dataStorage="dataStorage"
                   @setSelectedItem="setSelectedItem"
               />
             </div>
@@ -25,7 +24,6 @@
           <div v-if="dataStorage">
             <DetailComponent
                 :selectedItemId="selectedItemId"
-                :dataStorage="dataStorage"
             />
           </div>
         </b-col>
@@ -41,9 +39,10 @@
 
 <script>
 import './../style/style.css';
-import DataStorage from '@/Data/DataStorage';
+
+import dataStorageInstance from '@/Data/DataStorageInstance'
 import CategoryComponent from '@/components/CategoryComponent';
-import DetailComponent from "@/components/DetailComponent";
+import DetailComponent from '@/components/ItemDetailsComponent';
 
 export default {
   name: 'Main',
@@ -52,13 +51,12 @@ export default {
   data() {
     return {
       /** @var {DataStorage} dataStorage */
-      dataStorage: null,
+      dataStorage: dataStorageInstance,
       selectedItemId: 2,
     };
   },
 
   mounted() {
-    this.dataStorage = new DataStorage();
     this.dataStorage.loadData();
   },
 

@@ -170,4 +170,40 @@ export default class Item {
   delete () {
     Api.delete(null, ApiUrls.items, this.id);
   }
+
+  /**
+   * @param {?Item} item
+   * @return {
+   * [{icon: string, text: string, value: number, class: string}]
+   * |{icon: string, text: string, value: number, class: string}
+   * }
+   */
+  static getItemStateData (item = null) {
+    let stateData = [
+      {
+        value: Item.STATE_OK,
+        text: 'OK',
+        icon: 'circle-fill',
+        class: 'green'
+      },
+      {
+        value: Item.STATE_BORROWED,
+        text: 'Pożyczony',
+        icon: 'slash-circle-fill',
+        class: 'yellow'
+      },
+      {
+        value: Item.STATE_BROKEN,
+        text: 'Zepsuty',
+        icon: 'x-circle-fill',
+        class: 'red'
+      },
+    ];
+
+    if (item === null) {
+      return stateData;
+    }
+
+    return stateData.find(state => state.value === item.state);
+  }
 }

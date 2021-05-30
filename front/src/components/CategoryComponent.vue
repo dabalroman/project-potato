@@ -27,7 +27,7 @@
         >
           <template #cell(status)="data">
             <b-icon
-                :title="data.item.status.description"
+                :title="data.item.status.text"
                 :class="data.item.status.class"
                 :icon="data.item.status.icon"
             />
@@ -40,9 +40,9 @@
 </template>
 
 <script>
+import dataStorageInstance from '@/Data/DataStorageInstance';
 import Category from '@/Model/Category';
 import Filters from '@/utils/Filters';
-import DataStorage from '@/Data/DataStorage';
 import Item from '@/Model/Item';
 
 export default {
@@ -52,14 +52,11 @@ export default {
       type: Category,
       required: true
     },
-    dataStorage: {
-      type: DataStorage,
-      required: true
-    }
   },
 
   data () {
     return {
+      dataStorage: dataStorageInstance,
       editable: false,
       fields: [
         {
@@ -120,13 +117,7 @@ export default {
 
   methods: {
     getIconForItemStatus (status) {
-      if (status === Item.STATE_OK) {
-        return { description: 'Ok', icon: 'circle-fill', class: 'green' };
-      } else if (status === Item.STATE_BORROWED) {
-        return { description: 'Pożyczony', icon: 'slash-circle-fill', class: 'yellow' };
-      } else {
-        return { description: 'Zepsuty', icon: 'x-circle-fill', class: 'red' };
-      }
+      return Item.getItemStateData().find(state => state.value === status);
     },
 
     rowClickedHandler (rowData) {
@@ -149,6 +140,7 @@ export default {
     },
 
     saveCategoryChanges () {
+      console.log(`Saving category:${this.category.name}:${this.category.id}`);
       this.category.save();
     }
   }
