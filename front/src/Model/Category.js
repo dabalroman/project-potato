@@ -1,6 +1,7 @@
 import Api from '@/api/Api';
 import ApiUrls from '@/api/ApiUrls';
 
+// noinspection JSUnusedGlobalSymbols,DuplicatedCode
 export default class Category {
   id;
   name;

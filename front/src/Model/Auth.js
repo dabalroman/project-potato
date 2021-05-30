@@ -2,6 +2,7 @@ import Api from '@/api/Api';
 import ApiUrls from '@/api/ApiUrls';
 import readonly from '@/utils/readonly';
 
+// noinspection JSUnusedGlobalSymbols,DuplicatedCode
 export default class Auth {
   @readonly
   LOCAL_STORAGE_TOKEN = 'token';

@@ -1,7 +1,14 @@
 import Api from '@/api/Api';
 import ApiUrls from '@/api/ApiUrls';
+import readonly from '@/utils/readonly';
 
+// noinspection JSUnusedGlobalSymbols,DuplicatedCode
 export default class User {
+  @readonly
+  static ROLE_ADMIN = 0;
+  @readonly
+  static ROLE_MERE_MORTAL = 1;
+
   id;
   name;
   email;
@@ -16,27 +23,30 @@ export default class User {
    * @param {string} name
    * @param {string} email
    * @param {string} password
+   * @param {number} role
    * @return User
    */
-  static create (name, email, password) {
-    return (new User()).populate(null, name, email, password);
+  static create (name, email, password, role) {
+    return (new User()).populate(null, name, email, password, role);
   }
 
   /**
    * Populate object with data
-   * @param {number} id
+   * @param {?number} id
    * @param {string} name
    * @param {string} email
    * @param {string} password
+   * @param {number} role
    * @param {?string} created_at
    * @param {?string} updated_at
    * @return User
    */
-  populate (id, name, email, password, created_at = null, updated_at = null) {
+  populate (id, name, email, password, role, created_at = null, updated_at = null) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.password = password;
+    this.role = role;
     this.created_at = created_at;
     this.updated_at = updated_at;
 
@@ -61,6 +71,7 @@ export default class User {
             data.name,
             data.email,
             data.password,
+            data.role,
             data.created_at,
             data.updated_at
           )
@@ -91,6 +102,7 @@ export default class User {
         responseData.name,
         responseData.email,
         responseData.password,
+        responseData.role,
         responseData.created_at,
         responseData.updated_at
       );
@@ -110,7 +122,8 @@ export default class User {
     let data = {
       'name': this.name,
       'email': this.email,
-      'password': this.password
+      'password': this.password,
+      'role': this.role
     };
 
     if (this.id == null) {

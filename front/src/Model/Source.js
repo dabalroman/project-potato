@@ -1,6 +1,7 @@
 import Api from '@/api/Api';
 import ApiUrls from '@/api/ApiUrls';
 
+// noinspection JSUnusedGlobalSymbols,DuplicatedCode
 export default class Source {
   id;
   name;
@@ -21,7 +22,7 @@ export default class Source {
 
   /**
    * Populate object with data
-   * @param {number} id
+   * @param {?number} id
    * @param {string} name
    * @param {number[]} items
    * @param {?string} created_at

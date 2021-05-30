@@ -2,6 +2,7 @@ import Api from '@/api/Api';
 import ApiUrls from '@/api/ApiUrls';
 import readonly from '@/utils/readonly';
 
+// noinspection JSUnusedGlobalSymbols,DuplicatedCode
 export default class Item {
   @readonly
   static STATE_OK = 0;
@@ -41,7 +42,7 @@ export default class Item {
 
   /**
    * Populate object with data
-   * @param {number} id
+   * @param {?number} id
    * @param {string} name
    * @param {number} price
    * @param {number} amount
@@ -49,7 +50,7 @@ export default class Item {
    * @param {string} description
    * @param {number} source
    * @param {number} category
-   * @param {string} last_edit_by
+   * @param {?number} last_edit_by
    * @param {?string} created_at
    * @param {?string} updated_at
    * @return Item
