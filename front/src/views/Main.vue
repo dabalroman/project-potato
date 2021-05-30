@@ -25,7 +25,7 @@
             <ItemDetailsComponent
                 :selectedItemId="selectedItemId"
                 @editModeSet="itemEditModeSet"
-                @changesWereMade="changesWereMade"
+                @itemWasChanged="itemWasChanged"
             />
           </div>
         </b-col>
@@ -33,7 +33,7 @@
       </b-row>
     </b-container>
 
-    <div class="add_item_button">
+    <div class="add_item_button" @click="newItem">
       <b-icon icon="plus" aria-hidden="true"></b-icon>
     </div>
   </div>
@@ -45,6 +45,7 @@ import './../style/style.css';
 import dataStorageInstance from '@/Data/DataStorageInstance';
 import CategoryComponent from '@/components/CategoryComponent';
 import ItemDetailsComponent from '@/components/ItemDetailsComponent';
+import Item from '@/Model/Item';
 
 export default {
   name: 'Main',
@@ -91,8 +92,14 @@ export default {
       this.lockItemSelect = itemDetailsEditableState;
     },
 
-    changesWereMade: function (){
+    itemWasChanged: function (itemId) {
+      this.selectedItemId = itemId;
       this.dataStorage.rebuildCategoryToItemMaps();
+    },
+
+    newItem: function () {
+      this.dataStorage.items.data.push(Item.createEmpty(this.dataStorage));
+      this.selectedItemId = Item.NULL_ID;
     }
   },
 

@@ -11,6 +11,9 @@ export default class Item {
   @readonly
   static STATE_BROKEN = 2;
 
+  @readonly
+  static NULL_ID = 0;
+
   id;
   name;
   price;
@@ -24,6 +27,24 @@ export default class Item {
   updated_at;
 
   ready = false;
+
+  /**
+   * Create new empty object
+   * @param {DataStorage} dataStorage
+   * @return Item
+   */
+  static createEmpty (dataStorage) {
+    return (new Item()).populate(
+      Item.NULL_ID,
+      '',
+      0,
+      1,
+      this.STATE_OK,
+      '',
+      dataStorage.sources.data.find(() => true).id,
+      dataStorage.categories.data.find(() => true).id,
+    );
+  }
 
   /**
    * Create new object
@@ -120,19 +141,7 @@ export default class Item {
     let item = new Item();
 
     Api.get(function (responseData) {
-      item.populate(
-        responseData.id,
-        responseData.name,
-        responseData.price,
-        responseData.amount,
-        responseData.state,
-        responseData.description,
-        responseData.source,
-        responseData.category,
-        responseData.last_edit_by,
-        responseData.created_at,
-        responseData.updated_at
-      );
+      item.populateWithApiResponse(responseData);
     }, ApiUrls.items, id);
 
     if (callback) {
@@ -143,9 +152,29 @@ export default class Item {
   }
 
   /**
-   * Save object to DB
+   * @param responseData
    */
-  save () {
+  populateWithApiResponse (responseData) {
+    this.populate(
+      responseData.id,
+      responseData.name,
+      responseData.price,
+      responseData.amount,
+      responseData.state,
+      responseData.description,
+      responseData.source,
+      responseData.category,
+      responseData.last_edit_by,
+      responseData.created_at,
+      responseData.updated_at
+    );
+  }
+
+  /**
+   * Save object to DB
+   * @param {?function} callback
+   */
+  save (callback = null) {
     let data = {
       'name': this.name,
       'price': this.price,
@@ -156,10 +185,22 @@ export default class Item {
       'category': this.category
     };
 
-    if (this.id == null) {
-      Api.post(null, ApiUrls.items, data);
+    if (this.id === null || this.id === Item.NULL_ID) {
+      Api.post(response => {
+        this.populateWithApiResponse(response);
+
+        if (callback) {
+          callback(this);
+        }
+      }, ApiUrls.items, data);
     } else {
-      Api.put(null, ApiUrls.items, this.id, data);
+      Api.put(response => {
+        this.populateWithApiResponse(response);
+
+        if (callback) {
+          callback(this);
+        }
+      }, ApiUrls.items, this.id, data);
     }
   }
 

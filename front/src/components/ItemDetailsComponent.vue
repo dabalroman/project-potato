@@ -110,6 +110,7 @@
 <script>
 import dataStorageInstance from '@/Data/DataStorageInstance';
 import Filters from '@/utils/Filters';
+import Item from '@/Model/Item';
 
 export default {
   name: 'ItemDetailsComponent',
@@ -132,8 +133,10 @@ export default {
   },
 
   watch: {
-    selectedItemId: function () {
-      this.editable = false;
+    selectedItemId: function (newValue) {
+      if(newValue === Item.NULL_ID){
+        this.editable = true;
+      }
     }
   },
 
@@ -173,7 +176,6 @@ export default {
 
       if (!this.editable) {
         this.saveItemChanges();
-        this.$emit('changesWereMade');
       }
 
       this.$emit('editModeSet', this.editable);
@@ -181,7 +183,10 @@ export default {
 
     saveItemChanges () {
       console.log(`Saving item:${this.item.name}:${this.item.id}`);
-      this.item.save();
+
+      this.item.save(item => {
+        this.$emit('itemWasChanged', item.id);
+      });
     }
   }
 };
