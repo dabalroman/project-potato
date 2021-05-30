@@ -131,6 +131,12 @@ export default {
     };
   },
 
+  watch: {
+    selectedItemId: function () {
+      this.editable = false;
+    }
+  },
+
   computed: {
     item: function () {
       if (!this.isDateStorageReady()) {
@@ -168,6 +174,7 @@ export default {
       }
 
       this.editable = !this.editable;
+      this.$emit('editModeSet', this.editable);
     },
 
     saveItemChanges () {

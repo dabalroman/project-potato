@@ -22,8 +22,9 @@
 
         <b-col cols="4" class="right_panel">
           <div v-if="dataStorage">
-            <DetailComponent
+            <ItemDetailsComponent
                 :selectedItemId="selectedItemId"
+                @editModeSet="itemEditModeSet"
             />
           </div>
         </b-col>
@@ -42,17 +43,18 @@ import './../style/style.css';
 
 import dataStorageInstance from '@/Data/DataStorageInstance'
 import CategoryComponent from '@/components/CategoryComponent';
-import DetailComponent from '@/components/ItemDetailsComponent';
+import ItemDetailsComponent from '@/components/ItemDetailsComponent';
 
 export default {
   name: 'Main',
-  components: {CategoryComponent, DetailComponent},
+  components: {CategoryComponent, ItemDetailsComponent},
 
   data() {
     return {
       /** @var {DataStorage} dataStorage */
       dataStorage: dataStorageInstance,
       selectedItemId: 2,
+      lockItemSelect: false,
     };
   },
 
@@ -76,7 +78,16 @@ export default {
     },
 
     setSelectedItem: function (itemId) {
+      if(this.lockItemSelect){
+        alert("Zakończ edytowanie przedmiotu by wybrać inny.")
+        return;
+      }
+
       this.selectedItemId = itemId;
+    },
+
+    itemEditModeSet: function (itemDetailsEditableState) {
+      this.lockItemSelect = itemDetailsEditableState;
     }
   },
 
