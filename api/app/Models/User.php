@@ -24,6 +24,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string                                                     $name
  * @property string                                                     $email
  * @property string                                                     $password
+ * @property int                                                        $role
  * @property Carbon|null                                                $created_at
  * @property Carbon|null                                                $updated_at
  * @method static Builder|User whereCreatedAt($value)
@@ -42,10 +43,14 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
+    public const ROLE_ADMIN = 1;
+    public const ROLE_MERE_MORTAL = 0;
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role'
     ];
 
     protected $hidden = [
@@ -71,5 +76,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims(): array
     {
         return [];
+    }
+
+    public static function isAdmin(User $user): bool
+    {
+        return $user->role === self::ROLE_ADMIN;
     }
 }
