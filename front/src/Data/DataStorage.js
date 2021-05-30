@@ -106,6 +106,13 @@ export default class DataStorage {
     }
 
     /**
+     * @param item
+     */
+    removeItem (item) {
+        this.items.data.splice(this.items.data.indexOf(item), 1);
+    }
+
+    /**
      * @return {?User[]}
      */
     getUsers () {

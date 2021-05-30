@@ -7,11 +7,21 @@
           @keyup.native="inputKeyConfirmHandler"
           autofocus
       ></b-input>
-      <b-icon icon='check-square' class="icon" @click="toggleEditable"/>
+      <b-icon
+          icon='check-square'
+          class="icon"
+          @click="toggleEditable"
+          title="Zapisz"
+      />
     </div>
     <div v-else class="list_title">
       <span> {{ category.name }} </span>
-      <b-icon icon='pencil-square' class="icon" @click="toggleEditable"/>
+      <b-icon
+          icon='pencil-square'
+          class="icon"
+          @click="toggleEditable"
+          title="Edytuj"
+      />
     </div>
     <div class="list_content">
       <div v-if="tableData.length > 0">

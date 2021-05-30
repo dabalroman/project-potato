@@ -2,8 +2,27 @@
   <div v-if="item">
     <div class="item_title">
       <h4>{{ item.name }}</h4>
-      <b-icon v-if="editable" icon='check-square' class="icon" @click="toggleEditable"/>
-      <b-icon v-else icon='pencil-square' class="icon" @click="toggleEditable"/>
+      <div v-if="editable">
+        <b-icon
+            icon='x-square-fill'
+            class="icon red me-3"
+            @click="removeItem"
+            title="Usuń"
+        />
+        <b-icon
+            icon='check-square'
+            class="icon green"
+            @click="toggleEditable"
+            title="Zapisz"
+        />
+      </div>
+      <b-icon
+          v-else
+          icon='pencil-square'
+          class="icon"
+          @click="toggleEditable"
+          title="Edytuj"
+      />
     </div>
     <div class="item_details">
       <div>
@@ -168,7 +187,7 @@ export default {
 
   watch: {
     selectedItemId: function (newValue) {
-      if(newValue === Item.NULL_ID){
+      if (newValue === Item.NEW_ITEM_ID) {
         this.editable = true;
       }
     }
@@ -219,6 +238,17 @@ export default {
       }
 
       this.$emit('editModeSet', this.editable);
+    },
+
+    removeItem () {
+      console.log(`Removing item:${this.item.name}:${this.item.id}`);
+
+      this.toggleEditable();
+
+      this.item.delete(() => {
+        this.dataStorage.removeItem(this.item);
+        this.$emit('itemWasChanged', Item.NULL_ID);
+      });
     },
 
     saveItemChanges () {

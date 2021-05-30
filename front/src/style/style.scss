@@ -162,7 +162,7 @@ $button-size: 4.5rem;
 
 .icon:hover {
     cursor: pointer;
-    color: $color-secondary;
+    color: $color-secondary !important;
 }
 
 .b-icon {

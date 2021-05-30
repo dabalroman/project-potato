@@ -98,14 +98,14 @@ export default {
       this.lockItemSelect = itemDetailsEditableState;
     },
 
-    itemWasChanged: function (itemId) {
+    itemWasChanged: function (itemId = null) {
       this.selectedItemId = itemId;
       this.dataStorage.rebuildCategoryToItemMaps();
     },
 
     newItem: function () {
       this.dataStorage.items.data.push(Item.createEmpty(this.dataStorage));
-      this.selectedItemId = Item.NULL_ID;
+      this.selectedItemId = Item.NEW_ITEM_ID;
     }
   },
 

@@ -12,7 +12,9 @@ export default class Item {
   static STATE_BROKEN = 2;
 
   @readonly
-  static NULL_ID = 0;
+  static NULL_ID = -1;
+  @readonly
+  static NEW_ITEM_ID = 0;
 
   id;
   name;
@@ -207,9 +209,14 @@ export default class Item {
   /**
    * Delete object from DB if no any foreign-key dependencies
    * Does not delete this instance
+   * @param {?function} callback
    */
-  delete () {
-    Api.delete(null, ApiUrls.items, this.id);
+  delete (callback = null) {
+    Api.delete(() => {
+      if (callback) {
+        callback();
+      }
+    }, ApiUrls.items, this.id);
   }
 
   /**

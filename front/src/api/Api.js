@@ -33,7 +33,8 @@ export default class Api {
 
     fetch(url, params)
       .then(this.handleErrors)
-      .then(response => response.json())
+      .then(response => response.text())
+      .then(response => response ? JSON.parse(response) : {})
       .then(response => {
         if (callback !== null) {
           callback(response);
