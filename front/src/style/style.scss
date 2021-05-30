@@ -71,6 +71,11 @@ $button-size: 4.5rem;
                 text-transform: uppercase;
 
                 box-shadow: $shadow-down;
+
+                input {
+                    margin-top: -3px;
+                    margin-bottom: -4px;
+                }
             }
 
             .list_content {
