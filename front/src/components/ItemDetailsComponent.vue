@@ -9,6 +9,31 @@
       <div>
         <b-container>
           <b-row class="item_row">
+            <b-col cols="4" class="item_label">Nazwa</b-col>
+            <b-col cols="8">
+              <div v-if="editable">
+                <b-form-input
+                    v-model="item.name"
+                />
+              </div>
+              <div v-else>{{ item.name }}</div>
+            </b-col>
+          </b-row>
+
+          <b-row class="item_row">
+            <b-col cols="4" class="item_label">Opis</b-col>
+            <b-col cols="8">
+              <div v-if="editable">
+                <b-form-textarea
+                    v-model="item.description"
+                    rows="3"
+                />
+              </div>
+              <div v-else>{{ item.description }}</div>
+            </b-col>
+          </b-row>
+
+          <b-row class="item_row">
             <b-col cols="4" class="item_label">Status</b-col>
             <b-col cols="8">
               <div v-if="editable">
@@ -40,18 +65,6 @@
                 />
               </div>
               <div v-else>{{ dataStorage.getSourceForItem(item).name | capitalize }}</div>
-            </b-col>
-          </b-row>
-
-          <b-row class="item_row">
-            <b-col cols="4" class="item_label">Nazwa</b-col>
-            <b-col cols="8">
-              <div v-if="editable">
-                <b-form-input
-                    v-model="item.name"
-                />
-              </div>
-              <div v-else>{{ item.name }}</div>
             </b-col>
           </b-row>
 
@@ -99,6 +112,27 @@
             <b-col cols="4" class="item_label">Wartość</b-col>
             <b-col cols="8">
               <div>{{ item.amount * item.price | formatCurrency }}</div>
+            </b-col>
+          </b-row>
+
+          <b-row class="item_row">
+            <b-col cols="4" class="item_label">Utworzono</b-col>
+            <b-col cols="8">
+              <div>{{ item.created_at | formatDateString }}</div>
+            </b-col>
+          </b-row>
+
+          <b-row class="item_row">
+            <b-col cols="4" class="item_label">Edytowano</b-col>
+            <b-col cols="8">
+              <div>{{ item.updated_at | formatDateString }}</div>
+            </b-col>
+          </b-row>
+
+          <b-row class="item_row">
+            <b-col cols="4" class="item_label">Autor zmian</b-col>
+            <b-col cols="8">
+              <div>{{ dataStorage.getUser(item.last_edit_by).name | capitalize }}</div>
             </b-col>
           </b-row>
         </b-container>
@@ -158,12 +192,18 @@ export default {
     formatCurrency: function (value) {
       return Filters.formatCurrency(value);
     },
+
     capitalize: function (value) {
       return Filters.capitalize(value);
     },
+
     formatUnit: function (value) {
       return Filters.unit(value);
     },
+
+    formatDateString: function (value) {
+      return Filters.formatDateString(value);
+    }
   },
 
   methods: {
