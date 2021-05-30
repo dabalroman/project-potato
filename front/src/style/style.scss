@@ -1,5 +1,6 @@
 $color-primary: #fff;
 $color-secondary: #ffbd5b;
+$color-gray-bright: #999;
 $color-gray-light: #555;
 $color-gray-medium: #444;
 $color-gray-dark: #353535;
@@ -165,6 +166,14 @@ $button-size: 4.5rem;
 }
 
 //Override bootstrap
+.form-control {
+    background: $color-gray-light !important;
+    color: $color-primary !important;
+    border: none !important;
+    border-bottom: 2px solid $color-gray-bright !important;
+    border-radius: 0 !important;
+}
+
 .table {
     color: #ffffff !important;
 

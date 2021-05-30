@@ -76,6 +76,8 @@ export default class Api {
    * @param data
    */
   static put (callback, url, id, data) {
+    url += '/' + id;
+
     this.makeRequest('PUT', url, this.getHeaders(), data, callback);
   }
 

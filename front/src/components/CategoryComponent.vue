@@ -1,8 +1,17 @@
 <template>
   <div>
-    <div class="list_title">
+    <div v-if="editable" class="list_title">
+      <b-input
+          class="me-3"
+          v-model="category.name"
+          @keyup.native="inputKeyConfirmHandler"
+          autofocus
+      ></b-input>
+      <b-icon icon='check-square' class="icon" @click="toggleEditable"/>
+    </div>
+    <div v-else class="list_title">
       <span> {{ category.name }} </span>
-      <b-icon icon="pencil-square" class="icon"></b-icon>
+      <b-icon icon='pencil-square' class="icon" @click="toggleEditable"/>
     </div>
     <div class="list_content">
       <div v-if="tableData.length > 0">
@@ -11,6 +20,7 @@
             :fields="fields"
             responsive="sm"
             sort-by="nazwa"
+            sort-icon-left
             hover
             borderless
             @row-clicked="rowClickedHandler"
@@ -20,7 +30,7 @@
                 :title="data.item.status.description"
                 :class="data.item.status.class"
                 :icon="data.item.status.icon"
-                />
+            />
           </template>
         </b-table>
       </div>
@@ -50,6 +60,7 @@ export default {
 
   data () {
     return {
+      editable: false,
       fields: [
         {
           label: '',
@@ -65,11 +76,6 @@ export default {
           label: 'Źródło',
           key: 'zrodlo',
           sortable: true
-        },
-        {
-          label: 'Kategoria',
-          key: 'kategoria',
-          sortable: false
         },
         {
           label: 'Ilość',
@@ -102,7 +108,6 @@ export default {
               status: this.getIconForItemStatus(item.state),
               nazwa: item.name,
               zrodlo: this.dataStorage.getSourceForItem(item).name,
-              kategoria: Filters.capitalize(this.dataStorage.getCategoryForItem(item).name),
               ilosc: item.amount,
               cena: item.price,
               wartosc: item.amount * item.price,
@@ -127,6 +132,25 @@ export default {
     rowClickedHandler (rowData) {
       this.$emit('setSelectedItem', rowData.id);
     },
+
+    toggleEditable () {
+      if (this.editable) {
+        this.saveCategoryChanges();
+      }
+
+      this.editable = !this.editable;
+    },
+
+    inputKeyConfirmHandler (event) {
+      if (event.which === 13) {
+        this.editable = false;
+        this.saveCategoryChanges();
+      }
+    },
+
+    saveCategoryChanges () {
+      this.category.save();
+    }
   }
 };
 </script>
