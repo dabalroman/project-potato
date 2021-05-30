@@ -5,11 +5,15 @@ import readonly from '@/utils/readonly';
 // noinspection JSUnusedGlobalSymbols,DuplicatedCode
 export default class Auth {
   @readonly
+  LOCAL_STORAGE_USER_ID = 'userId';
+  @readonly
   LOCAL_STORAGE_TOKEN = 'token';
   @readonly
   LOCAL_STORAGE_TOKEN_EXPIRATION_DATE = 'tokenExpirationDate';
 
   loggedIn = false;
+  loggedAsId = null;
+
   token = null;
   tokenExpirationDate = null;
 
@@ -25,7 +29,9 @@ export default class Auth {
 
       if (new Date() < this.tokenExpirationDate) {
         this.loggedIn = true;
+        this.loggedAsId = parseInt(localStorage.getItem(this.LOCAL_STORAGE_USER_ID));
       } else {
+        localStorage.removeItem(this.LOCAL_STORAGE_USER_ID);
         localStorage.removeItem(this.LOCAL_STORAGE_TOKEN);
         localStorage.removeItem(this.LOCAL_STORAGE_TOKEN_EXPIRATION_DATE);
       }
@@ -44,16 +50,17 @@ export default class Auth {
       password: password
     };
 
-    let that = this;
-    Api.post(function (data) {
+    Api.post((data) => {
       let tokenExpirationDate = new Date();
       tokenExpirationDate.setTime(tokenExpirationDate.getTime() + data['expires_in'] * 1000);
 
-      localStorage.setItem(that.LOCAL_STORAGE_TOKEN, data['access_token']);
-      localStorage.setItem(that.LOCAL_STORAGE_TOKEN_EXPIRATION_DATE, tokenExpirationDate.toUTCString());
+      localStorage.setItem(this.LOCAL_STORAGE_USER_ID, data['user'].id);
+      localStorage.setItem(this.LOCAL_STORAGE_TOKEN, data['access_token']);
+      localStorage.setItem(this.LOCAL_STORAGE_TOKEN_EXPIRATION_DATE, tokenExpirationDate.toUTCString());
 
-      that.loggedIn = true;
-      that.tokenExpirationDate = tokenExpirationDate;
+      this.loggedIn = true;
+      this.loggedAsId = data['user'].id;
+      this.tokenExpirationDate = tokenExpirationDate;
     }, ApiUrls.auth.base + ApiUrls.auth.login, data);
   }
 

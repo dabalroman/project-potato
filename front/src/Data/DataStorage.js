@@ -11,6 +11,9 @@ export default class DataStorage {
     /** @type {DataContainer} */
     categories;
 
+    /** @type {?number} */
+    loggedAsId = null;
+
     /** @type {Boolean} */
     ready = false;
 
@@ -107,6 +110,13 @@ export default class DataStorage {
      */
     getUsers () {
         return this.users.data;
+    }
+
+    /**
+     * @return {?User}
+     */
+    getLoggedUser () {
+        return this.users.data.find(user => user.id === this.loggedAsId);
     }
 
     /**

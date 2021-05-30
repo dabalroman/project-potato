@@ -6,7 +6,7 @@
 
 <script>
 import Main from './views/Main';
-import Auth from '@/Model/Auth';
+import authInstance from '@/Model/AuthInstance';
 
 export default {
   name: 'App',
@@ -16,7 +16,7 @@ export default {
 
   data () {
     return {
-      auth: new Auth()
+      auth: authInstance
     };
   },
 

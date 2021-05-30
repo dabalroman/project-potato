@@ -2,15 +2,18 @@
   <div id="main_view" class="fullscreen">
 
     <div class="navbar">
-      <span>POTATO CRM</span>
-      <b-icon icon="person-circle"></b-icon>
+      <span>POTATO CMS</span>
+      <div>
+        <span v-if="isDateStorageReady()" class="me-3">{{ dataStorage.getLoggedUser().name }}</span>
+        <b-icon icon="person-circle"></b-icon>
+      </div>
     </div>
 
     <b-container fluid="true">
       <b-row>
 
         <b-col cols="8" class="left_panel">
-          <div v-if="categories && dataStorage">
+          <div v-if="isDateStorageReady()">
             <div class="item_list" v-for="category in categories" :key="category.id">
               <CategoryComponent
                   :category="category"
@@ -21,7 +24,7 @@
         </b-col>
 
         <b-col cols="4" class="right_panel">
-          <div v-if="dataStorage">
+          <div v-if="isDateStorageReady()">
             <ItemDetailsComponent
                 :selectedItemId="selectedItemId"
                 @editModeSet="itemEditModeSet"
@@ -43,6 +46,7 @@
 import './../style/style.css';
 
 import dataStorageInstance from '@/Data/DataStorageInstance';
+import authInstance from '@/Model/AuthInstance';
 import CategoryComponent from '@/components/CategoryComponent';
 import ItemDetailsComponent from '@/components/ItemDetailsComponent';
 import Item from '@/Model/Item';
@@ -55,6 +59,7 @@ export default {
     return {
       /** @var {DataStorage} dataStorage */
       dataStorage: dataStorageInstance,
+      authInstance: authInstance,
       selectedItemId: 2,
       lockItemSelect: false,
     };
@@ -62,6 +67,7 @@ export default {
 
   mounted () {
     this.dataStorage.loadData();
+    this.dataStorage.loggedAsId = authInstance.loggedAsId;
   },
 
   computed: {
