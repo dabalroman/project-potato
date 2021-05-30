@@ -119,7 +119,9 @@ $button-size: 4.5rem;
 
         .item_details {
             .item_row {
-                margin-bottom: 0.5rem;
+                margin: 0.5rem 0;
+                padding-bottom: 0.5rem;
+                border-bottom: 1px solid $color-gray-bright;
             }
         }
     }
