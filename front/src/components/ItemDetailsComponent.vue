@@ -169,11 +169,13 @@ export default {
     },
 
     toggleEditable () {
-      if (this.editable) {
+      this.editable = !this.editable;
+
+      if (!this.editable) {
         this.saveItemChanges();
+        this.$emit('changesWereMade');
       }
 
-      this.editable = !this.editable;
       this.$emit('editModeSet', this.editable);
     },
 

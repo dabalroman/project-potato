@@ -25,6 +25,7 @@
             <ItemDetailsComponent
                 :selectedItemId="selectedItemId"
                 @editModeSet="itemEditModeSet"
+                @changesWereMade="changesWereMade"
             />
           </div>
         </b-col>
@@ -41,15 +42,15 @@
 <script>
 import './../style/style.css';
 
-import dataStorageInstance from '@/Data/DataStorageInstance'
+import dataStorageInstance from '@/Data/DataStorageInstance';
 import CategoryComponent from '@/components/CategoryComponent';
 import ItemDetailsComponent from '@/components/ItemDetailsComponent';
 
 export default {
   name: 'Main',
-  components: {CategoryComponent, ItemDetailsComponent},
+  components: { CategoryComponent, ItemDetailsComponent },
 
-  data() {
+  data () {
     return {
       /** @var {DataStorage} dataStorage */
       dataStorage: dataStorageInstance,
@@ -58,7 +59,7 @@ export default {
     };
   },
 
-  mounted() {
+  mounted () {
     this.dataStorage.loadData();
   },
 
@@ -78,8 +79,8 @@ export default {
     },
 
     setSelectedItem: function (itemId) {
-      if(this.lockItemSelect){
-        alert("Zakończ edytowanie przedmiotu by wybrać inny.")
+      if (this.lockItemSelect) {
+        alert('Zakończ edytowanie przedmiotu by wybrać inny.');
         return;
       }
 
@@ -88,6 +89,10 @@ export default {
 
     itemEditModeSet: function (itemDetailsEditableState) {
       this.lockItemSelect = itemDetailsEditableState;
+    },
+
+    changesWereMade: function (){
+      this.dataStorage.rebuildCategoryToItemMaps();
     }
   },
 

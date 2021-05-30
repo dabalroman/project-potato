@@ -46,6 +46,16 @@ export default class DataStorage {
             && this.users.ready;
     }
 
+    rebuildCategoryToItemMaps () {
+        if (!this.isReady()) {
+            return;
+        }
+
+        this.categories.data.forEach(category => {
+            category.items = this.items.data.filter(item => item.category === category.id).map(item => item.id);
+        });
+    }
+
     /**
      * @return {?Category[]}
      */
