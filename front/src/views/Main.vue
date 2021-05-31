@@ -60,7 +60,7 @@ export default {
       /** @var {DataStorage} dataStorage */
       dataStorage: dataStorageInstance,
       authInstance: authInstance,
-      selectedItemId: 2,
+      selectedItemId: Item.NULL_ID,
       lockItemSelect: false,
     };
   },
@@ -98,7 +98,7 @@ export default {
       this.lockItemSelect = itemDetailsEditableState;
     },
 
-    itemWasChanged: function (itemId = null) {
+    itemWasChanged: function (itemId = Item.NULL_ID) {
       this.selectedItemId = itemId;
       this.dataStorage.rebuildCategoryToItemMaps();
     },
