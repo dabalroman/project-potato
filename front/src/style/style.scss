@@ -7,6 +7,7 @@ $color-gray-medium: #444;
 $color-gray-dark: #353535;
 $color-gray-deep: #333;
 $color-gray-void: #262626;
+$color-gray-overlay: #262626A0;
 
 $color-red: #db4e38;
 $color-yellow: #d7bd39;
@@ -98,6 +99,22 @@ $button-size: 4.5rem;
         background: $color-gray-dark;
         padding: 2rem;
 
+        & > div {
+            height: 100%;
+        }
+
+        .no_item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+
+            font-size: 1.2rem;
+
+            width: 100%;
+            height: 100%;
+        }
+
         .item_title {
             display: flex;
             align-items: center;
@@ -161,6 +178,100 @@ $button-size: 4.5rem;
 
             svg {
                 transform: rotate(90deg);
+            }
+        }
+    }
+}
+
+#login_screen {
+    color: $color-primary;
+    background-color: $color-gray-void;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .window {
+        display: block;
+        padding: 2rem;
+
+        background-color: $color-gray-dark;
+        box-shadow: $shadow-angle;
+
+        span {
+            display: block;
+            text-align: center;
+            font-size: 1.1rem;
+
+            &.title {
+                font-size: 2rem;
+                font-weight: bold;
+            }
+
+            &.text {
+                margin: 1rem;
+            }
+
+            &.label {
+                margin-top: 1rem;
+                padding: 0.5rem 0;
+                text-align: left;
+            }
+        }
+
+        button {
+            background-color: $color-gray-bright;
+            display: block;
+            margin: 2rem auto 0 auto;
+
+            &:hover {
+                background-color: $color-secondary;
+            }
+        }
+    }
+}
+
+.overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-color: $color-gray-overlay;
+    backdrop-filter: blur(2px);
+
+    .window {
+        display: block;
+        padding: 2rem;
+
+        background-color: $color-gray-dark;
+        box-shadow: $shadow-angle;
+
+        .title {
+            display: block;
+
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-row {
+            display: flex;
+            justify-content: center;
+            align-content: space-between;
+            align-items: center;
+
+            input {
+                margin-right: 1rem;
+            }
+
+            .icon {
+                font-size: 1.2rem;
             }
         }
     }

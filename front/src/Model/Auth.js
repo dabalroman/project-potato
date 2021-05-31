@@ -51,17 +51,29 @@ export default class Auth {
     };
 
     Api.post((data) => {
-      let tokenExpirationDate = new Date();
-      tokenExpirationDate.setTime(tokenExpirationDate.getTime() + data['expires_in'] * 1000);
+        let tokenExpirationDate = new Date();
+        tokenExpirationDate.setTime(tokenExpirationDate.getTime() + data['expires_in'] * 1000);
 
-      localStorage.setItem(this.LOCAL_STORAGE_USER_ID, data['user'].id);
-      localStorage.setItem(this.LOCAL_STORAGE_TOKEN, data['access_token']);
-      localStorage.setItem(this.LOCAL_STORAGE_TOKEN_EXPIRATION_DATE, tokenExpirationDate.toUTCString());
+        localStorage.setItem(this.LOCAL_STORAGE_USER_ID, data['user'].id);
+        localStorage.setItem(this.LOCAL_STORAGE_TOKEN, data['access_token']);
+        localStorage.setItem(this.LOCAL_STORAGE_TOKEN_EXPIRATION_DATE, tokenExpirationDate.toUTCString());
 
-      this.loggedIn = true;
-      this.loggedAsId = data['user'].id;
-      this.tokenExpirationDate = tokenExpirationDate;
-    }, ApiUrls.auth.base + ApiUrls.auth.login, data);
+        this.loggedIn = true;
+        this.loggedAsId = data['user'].id;
+        this.tokenExpirationDate = tokenExpirationDate;
+      },
+      ApiUrls.auth.base + ApiUrls.auth.login,
+      data,
+      () => {
+        alert('Błędne dane logowania');
+      });
+  }
+
+  logout () {
+    this.loggedIn = false;
+    localStorage.removeItem(this.LOCAL_STORAGE_USER_ID);
+    localStorage.removeItem(this.LOCAL_STORAGE_TOKEN);
+    localStorage.removeItem(this.LOCAL_STORAGE_TOKEN_EXPIRATION_DATE);
   }
 
   /**

@@ -111,10 +111,12 @@ export default {
       let itemsInCategory = this.dataStorage.getArrayOfItemsFromCategory(this.category);
 
       return itemsInCategory.map(item => {
+            let source = this.dataStorage.getSourceForItem(item);
+
             return {
               status: this.getIconForItemStatus(item.state),
               nazwa: item.name,
-              zrodlo: this.dataStorage.getSourceForItem(item).name,
+              zrodlo: source ? source.name : '',
               ilosc: item.amount,
               cena: item.price,
               wartosc: item.amount * item.price,

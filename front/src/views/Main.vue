@@ -5,7 +5,12 @@
       <span>POTATO CMS</span>
       <div>
         <span v-if="isDateStorageReady()" class="me-3">{{ dataStorage.getLoggedUser().name }}</span>
-        <b-icon icon="person-circle"></b-icon>
+        <b-icon
+            class="icon"
+            icon="person-circle"
+            title="Wyloguj"
+            @click="handleLogout"
+        ></b-icon>
       </div>
     </div>
 
@@ -60,7 +65,7 @@ export default {
       /** @var {DataStorage} dataStorage */
       dataStorage: dataStorageInstance,
       authInstance: authInstance,
-      selectedItemId: 2,
+      selectedItemId: Item.NULL_ID,
       lockItemSelect: false,
     };
   },
@@ -98,7 +103,7 @@ export default {
       this.lockItemSelect = itemDetailsEditableState;
     },
 
-    itemWasChanged: function (itemId = null) {
+    itemWasChanged: function (itemId = Item.NULL_ID) {
       this.selectedItemId = itemId;
       this.dataStorage.rebuildCategoryToItemMaps();
     },
@@ -106,6 +111,11 @@ export default {
     newItem: function () {
       this.dataStorage.items.data.push(Item.createEmpty(this.dataStorage));
       this.selectedItemId = Item.NEW_ITEM_ID;
+    },
+
+    handleLogout: function () {
+      this.dataStorage.loggedAsId = null;
+      this.authInstance.logout();
     }
   },
 

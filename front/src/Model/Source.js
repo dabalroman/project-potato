@@ -41,6 +41,19 @@ export default class Source {
   }
 
   /**
+   * @param responseData
+   */
+  populateWithApiResponse (responseData) {
+    return this.populate(
+      responseData.id,
+      responseData.name,
+      responseData.items,
+      responseData.created_at,
+      responseData.updated_at
+    );
+  }
+
+  /**
    * Get all categories from DB
    * This is async task, data won't be available immediately
    * @param {?function} callback
@@ -52,13 +65,7 @@ export default class Source {
     Api.get(function (responseData) {
       responseData.forEach(data => {
         sources.push(
-          (new Source()).populate(
-            data.id,
-            data.name,
-            data.items,
-            data.created_at,
-            data.updated_at
-          )
+          (new Source()).populateWithApiResponse(data)
         );
       });
 
@@ -81,13 +88,7 @@ export default class Source {
     let source = new Source();
 
     Api.get(function (responseData) {
-      source.populate(
-        responseData.id,
-        responseData.name,
-        responseData.items,
-        responseData.created_at,
-        responseData.updated_at
-      );
+      source.populateWithApiResponse(responseData)
     }, ApiUrls.sources, id);
 
     if (callback) {
@@ -99,16 +100,29 @@ export default class Source {
 
   /**
    * Save object to DB
+   * @param {function} callback
    */
-  save () {
+  save (callback = null) {
     let data = {
       'name': this.name
     };
 
     if (this.id == null) {
-      Api.post(null, ApiUrls.sources, data);
+      Api.post(response => {
+        this.populateWithApiResponse(response);
+
+        if (callback) {
+          callback(this);
+        }
+      }, ApiUrls.sources, data);
     } else {
-      Api.put(null, ApiUrls.sources, this.id, data);
+      Api.put(response => {
+        this.populateWithApiResponse(response);
+
+        if (callback) {
+          callback(this);
+        }
+      }, ApiUrls.sources, this.id, data);
     }
   }
 

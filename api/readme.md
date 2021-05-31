@@ -1,3 +1,6 @@
+# Project Setup
+run ```php artisan migrate:fresh --seed``` to create db
+
 # Endpoints
 - `/api/categories/`
 - `/api/items/`

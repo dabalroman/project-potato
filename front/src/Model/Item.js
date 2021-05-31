@@ -37,7 +37,7 @@ export default class Item {
    */
   static createEmpty (dataStorage) {
     return (new Item()).populate(
-      Item.NULL_ID,
+      Item.NEW_ITEM_ID,
       '',
       0,
       1,
@@ -45,6 +45,7 @@ export default class Item {
       '',
       dataStorage.sources.data.find(() => true).id,
       dataStorage.categories.data.find(() => true).id,
+      dataStorage.getLoggedUser().id
     );
   }
 
@@ -57,10 +58,11 @@ export default class Item {
    * @param {string} description
    * @param {number} source
    * @param {number} category
+   * @param {number} last_edit_by
    * @return Item
    */
-  static create (name, price, amount, state, description, source, category) {
-    return (new Item()).populate(null, name, price, amount, state, description, source, category);
+  static create (name, price, amount, state, description, source, category, last_edit_by) {
+    return (new Item()).populate(null, name, price, amount, state, description, source, category, last_edit_by);
   }
 
   /**
@@ -108,19 +110,7 @@ export default class Item {
     Api.get(function (responseData) {
       responseData.forEach(data => {
         items.push(
-          (new Item()).populate(
-            data.id,
-            data.name,
-            data.price,
-            data.amount,
-            data.state,
-            data.description,
-            data.source,
-            data.category,
-            data.last_edit_by,
-            data.created_at,
-            data.updated_at
-          )
+          (new Item()).populateWithApiResponse(data)
         );
       });
 
@@ -157,7 +147,7 @@ export default class Item {
    * @param responseData
    */
   populateWithApiResponse (responseData) {
-    this.populate(
+    return this.populate(
       responseData.id,
       responseData.name,
       responseData.price,
@@ -187,7 +177,7 @@ export default class Item {
       'category': this.category
     };
 
-    if (this.id === null || this.id === Item.NULL_ID) {
+    if (this.id === null || this.id === Item.NEW_ITEM_ID) {
       Api.post(response => {
         this.populateWithApiResponse(response);
 

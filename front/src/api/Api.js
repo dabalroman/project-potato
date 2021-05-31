@@ -19,9 +19,10 @@ export default class Api {
    * @param url
    * @param headers Object with headers as key: value
    * @param body
-   * @param callback Function to call after successful request
+   * @param {function} callback Function to call after successful request
+   * @param {function} errorCallback Function to call after failed request
    */
-  static makeRequest (method, url, headers, body, callback) {
+  static makeRequest (method, url, headers, body, callback, errorCallback = null) {
     let params = {
       method: method,
       headers: headers
@@ -32,7 +33,7 @@ export default class Api {
     }
 
     fetch(url, params)
-      .then(this.handleErrors)
+      .then(response => this.handleErrors(response, errorCallback))
       .then(response => response.text())
       .then(response => response ? JSON.parse(response) : {})
       .then(response => {
@@ -41,7 +42,14 @@ export default class Api {
         }
       })
       .catch(error => {
-        console.warn(error);
+        error = error.toString();
+        if (errorCallback) {
+          errorCallback(
+            parseInt(error.slice(error.indexOf(':') + 2, error.indexOf(':') + 5))
+          );
+        } else {
+          console.warn(error);
+        }
       });
   }
 
@@ -64,9 +72,10 @@ export default class Api {
    * @param callback
    * @param url
    * @param data
+   * @param errorCallback
    */
-  static post (callback, url, data) {
-    this.makeRequest('POST', url, this.getHeaders(), data, callback);
+  static post (callback, url, data, errorCallback = null) {
+    this.makeRequest('POST', url, this.getHeaders(), data, callback, errorCallback);
   }
 
   /**
@@ -94,9 +103,9 @@ export default class Api {
     this.makeRequest('DELETE', url, this.getHeaders(), null, callback);
   }
 
-  static handleErrors(response){
+  static handleErrors (response) {
     if (!response.ok) {
-      throw Error('Request failed with ' + response.status + ': ' + response.statusText);
+      throw Error(response.status + ': Request failed with' + response.statusText);
     }
 
     return response;
