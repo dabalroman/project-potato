@@ -158,6 +158,13 @@
       </div>
     </div>
   </div>
+  <div v-else class="no_item">
+    <div>
+      wybierz przedmiot z listy po lewej <b-icon-arrow-left-circle-fill/>
+      <br/>lub<br/>
+      utwórz nowy przedmiot przyciskiem <b-icon-plus-circle-fill/>
+    </div>
+  </div>
 </template>
 
 <script>
