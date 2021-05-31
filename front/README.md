@@ -1,4 +1,4 @@
-# Potato CRM - DEVEL
+# Potato CMS - DEVEL
 
 ## Bootstrap vue:
 https://bootstrap-vue.org/docs/components
