@@ -183,6 +183,54 @@ $button-size: 4.5rem;
     }
 }
 
+#login_screen {
+    color: $color-primary;
+    background-color: $color-gray-void;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .window {
+        display: block;
+        padding: 2rem;
+
+        background-color: $color-gray-dark;
+        box-shadow: $shadow-angle;
+
+        span {
+            display: block;
+            text-align: center;
+            font-size: 1.1rem;
+
+            &.title {
+                font-size: 2rem;
+                font-weight: bold;
+            }
+
+            &.text {
+                margin: 1rem;
+            }
+
+            &.label {
+                margin-top: 1rem;
+                padding: 0.5rem 0;
+                text-align: left;
+            }
+        }
+
+        button {
+            background-color: $color-gray-bright;
+            display: block;
+            margin: 2rem auto 0 auto;
+
+            &:hover {
+                background-color: $color-secondary;
+            }
+        }
+    }
+}
+
 .overlay {
     display: flex;
     align-items: center;
