@@ -4,6 +4,12 @@
         v-if="showCategoryOverlay"
         @closeOverlay="closeCategoryOverlay"
     />
+
+    <NewSourceOverlay
+        v-if="showSourceOverlay"
+        @closeOverlay="closeSourceOverlay"
+    />
+
     <div class="item_title">
       <h4>{{ item.name }}</h4>
       <div v-if="editable">
@@ -180,10 +186,12 @@ import Item from '@/Model/Item';
 
 import NewCategoryOverlay from '@/components/NewCategoryOverlay';
 import Category from '@/Model/Category';
+import NewSourceOverlay from '@/components/NewSourceOverlay';
+import Source from '@/Model/Source';
 
 export default {
   name: 'ItemDetailsComponent',
-  components: { NewCategoryOverlay },
+  components: { NewSourceOverlay, NewCategoryOverlay },
   props: {
     selectedItemId: {
       type: Number,
@@ -215,6 +223,10 @@ export default {
       handler () {
         if (this.item.category === 0) {
           this.showCategoryOverlay = true;
+        }
+
+        if (this.item.source === 0) {
+          this.showSourceOverlay = true;
         }
       },
       deep: true
@@ -308,6 +320,17 @@ export default {
 
         this.item.category = category.id;
         this.showCategoryOverlay = false;
+      });
+    },
+
+    closeSourceOverlay (newSourceName) {
+      let newSource = Source.create(newSourceName);
+
+      newSource.save(source => {
+        this.dataStorage.sources.data.push(source);
+
+        this.item.source = source.id;
+        this.showSourceOverlay = false;
       });
     }
   }
