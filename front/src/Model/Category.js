@@ -52,13 +52,7 @@ export default class Category {
     Api.get(function (responseData) {
       responseData.forEach(data => {
         categories.push(
-          (new Category()).populate(
-            data.id,
-            data.name,
-            data.items,
-            data.created_at,
-            data.updated_at
-          )
+          (new Category()).populateWithApiResponse(data)
         );
       });
 
@@ -98,17 +92,43 @@ export default class Category {
   }
 
   /**
-   * Save object to DB
+   * @param responseData
    */
-  save () {
+  populateWithApiResponse (responseData) {
+    return this.populate(
+      responseData.id,
+      responseData.name,
+      responseData.items,
+      responseData.created_at,
+      responseData.updated_at
+    );
+  }
+
+  /**
+   * Save object to DB
+   * @param {function} callback
+   */
+  save (callback = null) {
     let data = {
       'name': this.name
     };
 
     if (this.id == null) {
-      Api.post(null, ApiUrls.categories, data);
+      Api.post(response => {
+        this.populateWithApiResponse(response);
+
+        if (callback) {
+          callback(this);
+        }
+      }, ApiUrls.categories, data);
     } else {
-      Api.put(null, ApiUrls.categories, this.id, data);
+      Api.put(response => {
+        this.populateWithApiResponse(response);
+
+        if (callback) {
+          callback(this);
+        }
+      }, ApiUrls.categories, this.id, data);
     }
   }
 

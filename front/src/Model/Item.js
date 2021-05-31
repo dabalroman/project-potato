@@ -110,19 +110,7 @@ export default class Item {
     Api.get(function (responseData) {
       responseData.forEach(data => {
         items.push(
-          (new Item()).populate(
-            data.id,
-            data.name,
-            data.price,
-            data.amount,
-            data.state,
-            data.description,
-            data.source,
-            data.category,
-            data.last_edit_by,
-            data.created_at,
-            data.updated_at
-          )
+          (new Item()).populateWithApiResponse(data)
         );
       });
 
@@ -159,7 +147,7 @@ export default class Item {
    * @param responseData
    */
   populateWithApiResponse (responseData) {
-    this.populate(
+    return this.populate(
       responseData.id,
       responseData.name,
       responseData.price,

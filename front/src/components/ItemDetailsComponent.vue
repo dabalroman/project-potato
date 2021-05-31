@@ -1,5 +1,9 @@
 <template>
   <div v-if="item">
+    <NewCategoryOverlay
+        v-if="showCategoryOverlay"
+        @closeOverlay="closeCategoryOverlay"
+    />
     <div class="item_title">
       <h4>{{ item.name }}</h4>
       <div v-if="editable">
@@ -79,7 +83,7 @@
               <div v-if="editable">
                 <b-form-select
                     v-model="item.source"
-                    :options="dataStorage.getSourcesSelectData()"
+                    :options="sourceSelectData"
                     :number="true"
                 />
               </div>
@@ -93,7 +97,7 @@
               <div v-if="editable">
                 <b-form-select
                     v-model="item.category"
-                    :options="dataStorage.getCategorySelectData()"
+                    :options="categorySelectData"
                     :number="true"
                 />
               </div>
@@ -160,9 +164,11 @@
   </div>
   <div v-else class="no_item">
     <div>
-      wybierz przedmiot z listy po lewej <b-icon-arrow-left-circle-fill/>
+      wybierz przedmiot z listy po lewej
+      <b-icon-arrow-left-circle-fill/>
       <br/>lub<br/>
-      utwórz nowy przedmiot przyciskiem <b-icon-plus-circle-fill/>
+      utwórz nowy przedmiot przyciskiem
+      <b-icon-plus-circle-fill/>
     </div>
   </div>
 </template>
@@ -172,8 +178,12 @@ import dataStorageInstance from '@/Data/DataStorageInstance';
 import Filters from '@/utils/Filters';
 import Item from '@/Model/Item';
 
+import NewCategoryOverlay from '@/components/NewCategoryOverlay';
+import Category from '@/Model/Category';
+
 export default {
   name: 'ItemDetailsComponent',
+  components: { NewCategoryOverlay },
   props: {
     selectedItemId: {
       type: Number,
@@ -189,6 +199,8 @@ export default {
         categoryId: null
       },
       editable: false,
+      showCategoryOverlay: false,
+      showSourceOverlay: false,
     };
   },
 
@@ -197,6 +209,15 @@ export default {
       if (newValue === Item.NEW_ITEM_ID) {
         this.editable = true;
       }
+    },
+
+    item: {
+      handler () {
+        if (this.item.category === 0) {
+          this.showCategoryOverlay = true;
+        }
+      },
+      deep: true
     }
   },
 
@@ -211,6 +232,14 @@ export default {
 
     itemState: function () {
       return this.dataStorage.getItemStateSelectData(this.item);
+    },
+
+    categorySelectData: function () {
+      return this.addNewValueIndicatorToSelectData(this.dataStorage.getCategorySelectData());
+    },
+
+    sourceSelectData: function () {
+      return this.addNewValueIndicatorToSelectData(this.dataStorage.getSourcesSelectData());
     }
   },
 
@@ -263,6 +292,22 @@ export default {
 
       this.item.save(item => {
         this.$emit('itemWasChanged', item.id);
+      });
+    },
+
+    addNewValueIndicatorToSelectData (selectData) {
+      selectData.push({ value: 0, text: 'Nowy...' });
+      return selectData;
+    },
+
+    closeCategoryOverlay (newCategoryName) {
+      let newCategory = Category.create(newCategoryName);
+
+      newCategory.save(category => {
+        this.dataStorage.categories.data.push(category);
+
+        this.item.category = category.id;
+        this.showCategoryOverlay = false;
       });
     }
   }

@@ -7,6 +7,7 @@ $color-gray-medium: #444;
 $color-gray-dark: #353535;
 $color-gray-deep: #333;
 $color-gray-void: #262626;
+$color-gray-overlay: #262626A0;
 
 $color-red: #db4e38;
 $color-yellow: #d7bd39;
@@ -98,7 +99,7 @@ $button-size: 4.5rem;
         background: $color-gray-dark;
         padding: 2rem;
 
-        &>div{
+        & > div {
             height: 100%;
         }
 
@@ -177,6 +178,52 @@ $button-size: 4.5rem;
 
             svg {
                 transform: rotate(90deg);
+            }
+        }
+    }
+}
+
+.overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-color: $color-gray-overlay;
+    backdrop-filter: blur(2px);
+
+    .window {
+        display: block;
+        padding: 2rem;
+
+        background-color: $color-gray-dark;
+        box-shadow: $shadow-angle;
+
+        .title {
+            display: block;
+
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-row {
+            display: flex;
+            justify-content: center;
+            align-content: space-between;
+            align-items: center;
+
+            input {
+                margin-right: 1rem;
+            }
+
+            .icon {
+                font-size: 1.2rem;
             }
         }
     }
